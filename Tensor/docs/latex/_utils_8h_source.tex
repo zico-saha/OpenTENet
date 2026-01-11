@@ -1,0 +1,621 @@
+\doxysection{Utils.\+h}
+\hypertarget{_utils_8h_source}{}\label{_utils_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <set>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <algorithm>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <iterator>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <limits>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <numeric>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <cmath>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <climits>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <cassert>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <utility>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <functional>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <stdexcept>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <type\_traits>}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00018\ \textcolor{keyword}{concept\ }\mbox{\hyperlink{concept_numeric}{Numeric}}\ =\ std::is\_arithmetic\_v<T>;}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{namespace\ }Utils}
+\DoxyCodeLine{00021\ \{}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{template}<Numeric\ T>}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsAllPositive(\textcolor{keyword}{const}\ std::vector<T>\&\ nums);}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{template}<Numeric\ T>}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsAnyNegative(\textcolor{keyword}{const}\ std::vector<T>\&\ nums);}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keyword}{template}<Numeric\ T>}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsAllUnique(\textcolor{keyword}{const}\ std::vector<T>\&\ nums);}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keyword}{template}<Numeric\ T>}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsValidData(\textcolor{keyword}{const}\ std::vector<T>\&\ nums);}
+\DoxyCodeLine{00081\ \ \ \ \ }
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keyword}{template}<Numeric\ T,\ Numeric\ U,\ Numeric\ V>}
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsBounded(\textcolor{keyword}{const}\ std::vector<T>\&\ nums,\ U\ upper\_bound,\ V\ lower\_bound,\ \textcolor{keywordtype}{bool}\ strict\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keyword}{template}<Numeric\ T,\ Numeric\ U,\ Numeric\ V>}
+\DoxyCodeLine{00122\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsBounded(\textcolor{keyword}{const}\ std::vector<T>\&\ nums,\ \textcolor{keyword}{const}\ std::vector<U>\&\ upper\_bounds,\ \textcolor{keyword}{const}\ std::vector<V>\&\ lower\_bounds,\ \textcolor{keywordtype}{bool}\ strict\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keyword}{template}<Numeric\ T,\ Numeric\ U,\ Numeric\ V>}
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsBounded(\textcolor{keyword}{const}\ std::vector<T>\&\ nums,\ \textcolor{keyword}{const}\ std::vector<U>\&\ upper\_bounds,\ V\ lower\_bound,\ \textcolor{keywordtype}{bool}\ strict\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00159\ \ \ \ \ \textcolor{keyword}{template}<Numeric\ T,\ Numeric\ U,\ Numeric\ V>}
+\DoxyCodeLine{00160\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsBounded(\textcolor{keyword}{const}\ std::vector<T>\&\ nums,\ U\ upper\_bound,\ \textcolor{keyword}{const}\ std::vector<V>\&\ lower\_bounds,\ \textcolor{keywordtype}{bool}\ strict\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00176\ \ \ \ \ \textcolor{keyword}{template}<Numeric\ T,\ Numeric\ U>}
+\DoxyCodeLine{00177\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsUpperBounded(\textcolor{keyword}{const}\ std::vector<T>\&\ nums,\ U\ upper\_bound,\ \textcolor{keywordtype}{bool}\ strict\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00193\ \ \ \ \ \textcolor{keyword}{template}<Numeric\ T,\ Numeric\ U>}
+\DoxyCodeLine{00194\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsUpperBounded(\textcolor{keyword}{const}\ std::vector<T>\&\ nums,\ \textcolor{keyword}{const}\ std::vector<U>\&\ upper\_bounds,\ \textcolor{keywordtype}{bool}\ strict\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00210\ \ \ \ \ \textcolor{keyword}{template}<Numeric\ T,\ Numeric\ U>}
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsLowerBounded(\textcolor{keyword}{const}\ std::vector<T>\&\ nums,\ U\ lower\_bound,\ \textcolor{keywordtype}{bool}\ strict\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00227\ \ \ \ \ \textcolor{keyword}{template}<Numeric\ T,\ Numeric\ U>}
+\DoxyCodeLine{00228\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsLowerBounded(\textcolor{keyword}{const}\ std::vector<T>\&\ nums,\ \textcolor{keyword}{const}\ std::vector<U>\&\ lower\_bounds,\ \textcolor{keywordtype}{bool}\ strict\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00229\ \ \ \ \ }
+\DoxyCodeLine{00246\ \ \ \ \ \textcolor{keyword}{template}<Numeric\ T>}
+\DoxyCodeLine{00247\ \ \ \ \ std::vector<T>\ Permute(\textcolor{keyword}{const}\ std::vector<T>\&\ nums,\ \textcolor{keyword}{const}\ std::vector<int>\&\ permutation);}
+\DoxyCodeLine{00248\ }
+\DoxyCodeLine{00267\ \ \ \ \ \textcolor{keyword}{template}<Numeric\ T,\ Numeric\ U,\ Numeric\ V>}
+\DoxyCodeLine{00268\ \ \ \ \ std::vector<T>\ ScaleNShift(\textcolor{keyword}{const}\ std::vector<T>\&\ nums,\ \textcolor{keyword}{const}\ std::vector<U>\&\ scale,\ \textcolor{keyword}{const}\ std::vector<V>\&\ shift);}
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00284\ \ \ \ \ \textcolor{keyword}{template}<Numeric\ T,\ Numeric\ U,\ Numeric\ V>}
+\DoxyCodeLine{00285\ \ \ \ \ std::vector<T>\ ScaleNShift(\textcolor{keyword}{const}\ std::vector<T>\&\ nums,\ \textcolor{keyword}{const}\ std::vector<U>\&\ scale,\ V\ shift);}
+\DoxyCodeLine{00286\ }
+\DoxyCodeLine{00301\ \ \ \ \ \textcolor{keyword}{template}<Numeric\ T,\ Numeric\ U,\ Numeric\ V>}
+\DoxyCodeLine{00302\ \ \ \ \ std::vector<T>\ ScaleNShift(\textcolor{keyword}{const}\ std::vector<T>\&\ nums,\ U\ scale,\ \textcolor{keyword}{const}\ std::vector<V>\&\ shift);}
+\DoxyCodeLine{00303\ }
+\DoxyCodeLine{00316\ \ \ \ \ \textcolor{keyword}{template}<Numeric\ T,\ Numeric\ U,\ Numeric\ V>}
+\DoxyCodeLine{00317\ \ \ \ \ std::vector<T>\ ScaleNShift(\textcolor{keyword}{const}\ std::vector<T>\&\ nums,\ U\ scale,\ V\ shift);}
+\DoxyCodeLine{00318\ }
+\DoxyCodeLine{00331\ \ \ \ \ \textcolor{keyword}{template}<Numeric\ T>}
+\DoxyCodeLine{00332\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsRectangular(\textcolor{keyword}{const}\ std::vector<std::vector<T>>\&\ matrix);}
+\DoxyCodeLine{00333\ }
+\DoxyCodeLine{00347\ \ \ \ \ \textcolor{keyword}{template}<Numeric\ T>}
+\DoxyCodeLine{00348\ \ \ \ \ std::vector<std::vector<T>>\ TransposeMatrix(\textcolor{keyword}{const}\ std::vector<std::vector<T>>\&\ matrix);}
+\DoxyCodeLine{00349\ }
+\DoxyCodeLine{00367\ \ \ \ \ \textcolor{keyword}{template}<Numeric\ T>}
+\DoxyCodeLine{00368\ \ \ \ \ std::vector<std::vector<T>>\ StandardMatrixMultiply(\textcolor{keyword}{const}\ std::vector<std::vector<T>>\&\ m1,\ \textcolor{keyword}{const}\ std::vector<std::vector<T>>\&\ m2);}
+\DoxyCodeLine{00369\ }
+\DoxyCodeLine{00381\ \ \ \ \ \textcolor{keyword}{template}<Numeric\ T>}
+\DoxyCodeLine{00382\ \ \ \ \ std::vector<T>\ MatrixToVector(\textcolor{keyword}{const}\ std::vector<std::vector<T>>\&\ matrix);}
+\DoxyCodeLine{00383\ }
+\DoxyCodeLine{00398\ \ \ \ \ \textcolor{keyword}{template}<Numeric\ T>}
+\DoxyCodeLine{00399\ \ \ \ \ std::vector<std::vector<T>>\ VectorToMatrix(\textcolor{keyword}{const}\ std::vector<T>\&\ vec,\ std::pair<int,\ int>\ shape);}
+\DoxyCodeLine{00400\ }
+\DoxyCodeLine{00412\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsVolumeOverflow(\textcolor{keyword}{const}\ std::vector<int>\&\ shape);}
+\DoxyCodeLine{00413\ }
+\DoxyCodeLine{00426\ \ \ \ \ \textcolor{keywordtype}{int}\ \ ShapeToVolume(\textcolor{keyword}{const}\ std::vector<int>\&\ shape);}
+\DoxyCodeLine{00427\ }
+\DoxyCodeLine{00441\ \ \ \ \ std::vector<int>\ ShapeToStrides(\textcolor{keyword}{const}\ std::vector<int>\&\ shape);}
+\DoxyCodeLine{00442\ }
+\DoxyCodeLine{00457\ \ \ \ \ \textcolor{keywordtype}{int}\ FlatIndex(\textcolor{keyword}{const}\ std::vector<int>\&\ shape,\ \textcolor{keyword}{const}\ std::vector<int>\&\ tensor\_index);}
+\DoxyCodeLine{00458\ }
+\DoxyCodeLine{00472\ \ \ \ \ std::vector<int>\ TensorIndex(\textcolor{keyword}{const}\ std::vector<int>\&\ shape,\ \textcolor{keywordtype}{int}\ flat\_index);}
+\DoxyCodeLine{00473\ }
+\DoxyCodeLine{00488\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsBroadcastCompatible(\textcolor{keyword}{const}\ std::vector<int>\&\ shape\_1,\ \textcolor{keyword}{const}\ std::vector<int>\&\ shape\_2);}
+\DoxyCodeLine{00489\ }
+\DoxyCodeLine{00503\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsConvolveCompatible(\textcolor{keyword}{const}\ std::vector<int>\&\ main\_shape,\ \textcolor{keyword}{const}\ std::vector<int>\&\ filter\_shape);}
+\DoxyCodeLine{00504\ }
+\DoxyCodeLine{00518\ \ \ \ \ std::vector<int>\ BroadcastShape(\textcolor{keyword}{const}\ std::vector<int>\&\ shape\_1,\ \textcolor{keyword}{const}\ std::vector<int>\&\ shape\_2);}
+\DoxyCodeLine{00519\ }
+\DoxyCodeLine{00536\ \ \ \ \ std::vector<int>\ ConvolvedFeatureShape(\textcolor{keyword}{const}\ std::vector<int>\&\ main\_shape,\ \textcolor{keyword}{const}\ std::vector<int>\&\ filter\_shape,\ \textcolor{keyword}{const}\ std::vector<int>\&\ strides);}
+\DoxyCodeLine{00537\ }
+\DoxyCodeLine{00553\ \ \ \ \ std::vector<int>\ FindRangeComplement(\textcolor{keyword}{const}\ std::vector<int>\&\ nums,\ std::pair<int,\ int>\ bounds);}
+\DoxyCodeLine{00554\ \}}
+\DoxyCodeLine{00555\ }
+\DoxyCodeLine{00556\ }
+\DoxyCodeLine{00557\ \textcolor{comment}{//\ ========================================}}
+\DoxyCodeLine{00558\ \textcolor{comment}{//\ Validation\ Function(s)}}
+\DoxyCodeLine{00559\ \textcolor{comment}{//\ ========================================}}
+\DoxyCodeLine{00560\ \textcolor{keyword}{template}<Numeric\ T>}
+\DoxyCodeLine{00561\ \textcolor{keywordtype}{bool}\ Utils::IsAllPositive(\textcolor{keyword}{const}\ std::vector<T>\&\ nums)}
+\DoxyCodeLine{00562\ \{}
+\DoxyCodeLine{00563\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_arithmetic\_v<T>,\ \textcolor{stringliteral}{"{}IsAllPositive\ requires\ a\ numeric\ type"{}});}
+\DoxyCodeLine{00564\ }
+\DoxyCodeLine{00565\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ num\ :\ nums)}
+\DoxyCodeLine{00566\ \ \ \ \ \{}
+\DoxyCodeLine{00567\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!(num\ >\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(0)))}
+\DoxyCodeLine{00568\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00569\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00570\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00571\ \ \ \ \ \}}
+\DoxyCodeLine{00572\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00573\ \}}
+\DoxyCodeLine{00574\ }
+\DoxyCodeLine{00575\ \textcolor{keyword}{template}<Numeric\ T>}
+\DoxyCodeLine{00576\ \textcolor{keywordtype}{bool}\ Utils::IsAnyNegative(\textcolor{keyword}{const}\ std::vector<T>\&\ nums)}
+\DoxyCodeLine{00577\ \{}
+\DoxyCodeLine{00578\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_arithmetic\_v<T>,\ \textcolor{stringliteral}{"{}IsAnyNegative\ requires\ a\ numeric\ type"{}});}
+\DoxyCodeLine{00579\ }
+\DoxyCodeLine{00580\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ num\ :\ nums)}
+\DoxyCodeLine{00581\ \ \ \ \ \{}
+\DoxyCodeLine{00582\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (num\ <\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(0))}
+\DoxyCodeLine{00583\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00584\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00585\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00586\ \ \ \ \ \}}
+\DoxyCodeLine{00587\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00588\ \}}
+\DoxyCodeLine{00589\ }
+\DoxyCodeLine{00590\ \textcolor{keyword}{template}<Numeric\ T>}
+\DoxyCodeLine{00591\ \textcolor{keywordtype}{bool}\ Utils::IsAllUnique(\textcolor{keyword}{const}\ std::vector<T>\&\ nums)}
+\DoxyCodeLine{00592\ \{}
+\DoxyCodeLine{00593\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_arithmetic\_v<T>,\ \textcolor{stringliteral}{"{}IsAllUnique\ requires\ a\ numeric\ type"{}});}
+\DoxyCodeLine{00594\ }
+\DoxyCodeLine{00595\ \ \ \ \ std::set<T>\ freq;}
+\DoxyCodeLine{00596\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ num\ :\ nums)}
+\DoxyCodeLine{00597\ \ \ \ \ \{}
+\DoxyCodeLine{00598\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (freq.count(num))}
+\DoxyCodeLine{00599\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00600\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00601\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00602\ \ \ \ \ \ \ \ \ freq.insert(num);}
+\DoxyCodeLine{00603\ \ \ \ \ \}}
+\DoxyCodeLine{00604\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00605\ \}}
+\DoxyCodeLine{00606\ }
+\DoxyCodeLine{00607\ \textcolor{keyword}{template}<Numeric\ T>}
+\DoxyCodeLine{00608\ \textcolor{keywordtype}{bool}\ Utils::IsValidData(\textcolor{keyword}{const}\ std::vector<T>\&\ nums)}
+\DoxyCodeLine{00609\ \{}
+\DoxyCodeLine{00610\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_arithmetic\_v<T>,\ \textcolor{stringliteral}{"{}IsValidData\ requires\ a\ numeric\ type"{}});}
+\DoxyCodeLine{00611\ }
+\DoxyCodeLine{00612\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (std::is\_floating\_point\_v<T>)}
+\DoxyCodeLine{00613\ \ \ \ \ \{}
+\DoxyCodeLine{00614\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ num\ :\ nums)}
+\DoxyCodeLine{00615\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00616\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::isnan(num)\ ||\ std::isinf(num))}
+\DoxyCodeLine{00617\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00618\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00619\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00620\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00621\ \ \ \ \ \}}
+\DoxyCodeLine{00622\ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00623\ \ \ \ \ \{}
+\DoxyCodeLine{00624\ \ \ \ \ \ \ \ \ (void)nums;}
+\DoxyCodeLine{00625\ \ \ \ \ \}}
+\DoxyCodeLine{00626\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00627\ \}}
+\DoxyCodeLine{00628\ }
+\DoxyCodeLine{00629\ }
+\DoxyCodeLine{00630\ \textcolor{comment}{//\ ========================================}}
+\DoxyCodeLine{00631\ \textcolor{comment}{//\ Bounds\ Checking\ Function(s)}}
+\DoxyCodeLine{00632\ \textcolor{comment}{//\ ========================================}}
+\DoxyCodeLine{00633\ \textcolor{keyword}{template}<Numeric\ T,\ Numeric\ U,\ Numeric\ V>}
+\DoxyCodeLine{00634\ \textcolor{keywordtype}{bool}\ Utils::IsBounded(\textcolor{keyword}{const}\ std::vector<T>\&\ nums,\ U\ upper\_bound,\ V\ lower\_bound,\ \textcolor{keywordtype}{bool}\ strict)}
+\DoxyCodeLine{00635\ \{}
+\DoxyCodeLine{00636\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ num\ :\ nums)}
+\DoxyCodeLine{00637\ \ \ \ \ \{}
+\DoxyCodeLine{00638\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (num\ <\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(lower\_bound)\ ||\ num\ >\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(upper\_bound))}
+\DoxyCodeLine{00639\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00640\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00641\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00642\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (strict\ \&\&\ (num\ <=\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(lower\_bound)\ ||\ num\ >=\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(upper\_bound)))}
+\DoxyCodeLine{00643\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00644\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00645\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00646\ \ \ \ \ \}}
+\DoxyCodeLine{00647\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00648\ \}}
+\DoxyCodeLine{00649\ }
+\DoxyCodeLine{00650\ \textcolor{keyword}{template}<Numeric\ T,\ Numeric\ U,\ Numeric\ V>}
+\DoxyCodeLine{00651\ \textcolor{keywordtype}{bool}\ Utils::IsBounded(\textcolor{keyword}{const}\ std::vector<T>\&\ nums,\ \textcolor{keyword}{const}\ std::vector<U>\&\ upper\_bounds,\ \textcolor{keyword}{const}\ std::vector<V>\&\ lower\_bounds,\ \textcolor{keywordtype}{bool}\ strict)}
+\DoxyCodeLine{00652\ \{}
+\DoxyCodeLine{00653\ \ \ \ \ \textcolor{keywordflow}{if}\ (nums.size()\ !=\ upper\_bounds.size())}
+\DoxyCodeLine{00654\ \ \ \ \ \{}
+\DoxyCodeLine{00655\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}[Tensor-\/Utils]\ Bounds\ Checking\ failed:\ array\ size\ mismatch\ with\ \`{}upper\_bounds`."{}});}
+\DoxyCodeLine{00656\ \ \ \ \ \}}
+\DoxyCodeLine{00657\ }
+\DoxyCodeLine{00658\ \ \ \ \ \textcolor{keywordflow}{if}\ (nums.size()\ !=\ lower\_bounds.size())}
+\DoxyCodeLine{00659\ \ \ \ \ \{}
+\DoxyCodeLine{00660\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}[Tensor-\/Utils]\ Bounds\ Checking\ failed:\ array\ size\ mismatch\ with\ \`{}lower\_bounds`."{}});}
+\DoxyCodeLine{00661\ \ \ \ \ \}}
+\DoxyCodeLine{00662\ }
+\DoxyCodeLine{00663\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ nums.size();\ i++)}
+\DoxyCodeLine{00664\ \ \ \ \ \{}
+\DoxyCodeLine{00665\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (nums[i]\ <\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(lower\_bounds[i])\ ||\ nums[i]\ >\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(upper\_bounds[i]))}
+\DoxyCodeLine{00666\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00667\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00668\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00669\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (strict\ \&\&\ (nums[i]\ <=\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(lower\_bounds[i])\ ||\ nums[i]\ >=\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(upper\_bounds[i])))}
+\DoxyCodeLine{00670\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00671\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00672\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00673\ \ \ \ \ \}}
+\DoxyCodeLine{00674\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00675\ \}}
+\DoxyCodeLine{00676\ }
+\DoxyCodeLine{00677\ \textcolor{keyword}{template}<Numeric\ T,\ Numeric\ U,\ Numeric\ V>}
+\DoxyCodeLine{00678\ \textcolor{keywordtype}{bool}\ Utils::IsBounded(\textcolor{keyword}{const}\ std::vector<T>\&\ nums,\ \textcolor{keyword}{const}\ std::vector<U>\&\ upper\_bounds,\ V\ lower\_bound,\ \textcolor{keywordtype}{bool}\ strict)}
+\DoxyCodeLine{00679\ \{}
+\DoxyCodeLine{00680\ \ \ \ \ \textcolor{keywordflow}{if}\ (nums.size()\ !=\ upper\_bounds.size())}
+\DoxyCodeLine{00681\ \ \ \ \ \{}
+\DoxyCodeLine{00682\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}[Tensor-\/Utils]\ Bounds\ Checking\ failed:\ array\ size\ mismatch\ with\ \`{}upper\_bounds`."{}});}
+\DoxyCodeLine{00683\ \ \ \ \ \}}
+\DoxyCodeLine{00684\ }
+\DoxyCodeLine{00685\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ nums.size();\ i++)}
+\DoxyCodeLine{00686\ \ \ \ \ \{}
+\DoxyCodeLine{00687\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (nums[i]\ <\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(lower\_bound)\ ||\ nums[i]\ >\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(upper\_bounds[i]))}
+\DoxyCodeLine{00688\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00689\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00690\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00691\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (strict\ \&\&\ (nums[i]\ <=\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(lower\_bound)\ ||\ nums[i]\ >=\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(upper\_bounds[i])))}
+\DoxyCodeLine{00692\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00693\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00694\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00695\ \ \ \ \ \}}
+\DoxyCodeLine{00696\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00697\ \}}
+\DoxyCodeLine{00698\ }
+\DoxyCodeLine{00699\ \textcolor{keyword}{template}<Numeric\ T,\ Numeric\ U,\ Numeric\ V>}
+\DoxyCodeLine{00700\ \textcolor{keywordtype}{bool}\ Utils::IsBounded(\textcolor{keyword}{const}\ std::vector<T>\&\ nums,\ U\ upper\_bound,\ \textcolor{keyword}{const}\ std::vector<V>\&\ lower\_bounds,\ \textcolor{keywordtype}{bool}\ strict)}
+\DoxyCodeLine{00701\ \{}
+\DoxyCodeLine{00702\ \ \ \ \ \textcolor{keywordflow}{if}\ (nums.size()\ !=\ lower\_bounds.size())}
+\DoxyCodeLine{00703\ \ \ \ \ \{}
+\DoxyCodeLine{00704\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}[Tensor-\/Utils]\ Bounds\ Checking\ failed:\ array\ size\ mismatch\ with\ \`{}lower\_bounds`."{}});}
+\DoxyCodeLine{00705\ \ \ \ \ \}}
+\DoxyCodeLine{00706\ }
+\DoxyCodeLine{00707\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ nums.size();\ i++)}
+\DoxyCodeLine{00708\ \ \ \ \ \{}
+\DoxyCodeLine{00709\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (nums[i]\ <\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(lower\_bounds[i])\ ||\ nums[i]\ >\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(upper\_bound))}
+\DoxyCodeLine{00710\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00711\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00712\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00713\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (strict\ \&\&\ (nums[i]\ <=\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(lower\_bounds[i])\ ||\ nums[i]\ >=\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(upper\_bound)))}
+\DoxyCodeLine{00714\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00715\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00716\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00717\ \ \ \ \ \}}
+\DoxyCodeLine{00718\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00719\ \}}
+\DoxyCodeLine{00720\ }
+\DoxyCodeLine{00721\ \textcolor{keyword}{template}<Numeric\ T,\ Numeric\ U>}
+\DoxyCodeLine{00722\ \textcolor{keywordtype}{bool}\ Utils::IsUpperBounded(\textcolor{keyword}{const}\ std::vector<T>\&\ nums,\ U\ upper\_bound,\ \textcolor{keywordtype}{bool}\ strict)}
+\DoxyCodeLine{00723\ \{}
+\DoxyCodeLine{00724\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ num\ :\ nums)}
+\DoxyCodeLine{00725\ \ \ \ \ \{}
+\DoxyCodeLine{00726\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (num\ >\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(upper\_bound))}
+\DoxyCodeLine{00727\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00728\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00729\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00730\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (strict\ \&\&\ num\ >=\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(upper\_bound))}
+\DoxyCodeLine{00731\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00732\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00733\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00734\ \ \ \ \ \}}
+\DoxyCodeLine{00735\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00736\ \}}
+\DoxyCodeLine{00737\ }
+\DoxyCodeLine{00738\ \textcolor{keyword}{template}<Numeric\ T,\ Numeric\ U>}
+\DoxyCodeLine{00739\ \textcolor{keywordtype}{bool}\ Utils::IsUpperBounded(\textcolor{keyword}{const}\ std::vector<T>\&\ nums,\ \textcolor{keyword}{const}\ std::vector<U>\&\ upper\_bounds,\ \textcolor{keywordtype}{bool}\ strict)}
+\DoxyCodeLine{00740\ \{}
+\DoxyCodeLine{00741\ \ \ \ \ \textcolor{keywordflow}{if}\ (nums.size()\ !=\ upper\_bounds.size())}
+\DoxyCodeLine{00742\ \ \ \ \ \{}
+\DoxyCodeLine{00743\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}[Tensor-\/Utils]\ Bounds\ Checking\ failed:\ array\ size\ mismatch\ with\ \`{}upper\_bounds`."{}});}
+\DoxyCodeLine{00744\ \ \ \ \ \}}
+\DoxyCodeLine{00745\ }
+\DoxyCodeLine{00746\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ nums.size();\ i++)}
+\DoxyCodeLine{00747\ \ \ \ \ \{}
+\DoxyCodeLine{00748\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (nums[i]\ >\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(upper\_bounds[i]))}
+\DoxyCodeLine{00749\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00750\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00751\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00752\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (strict\ \&\&\ nums[i]\ >=\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(upper\_bounds[i]))}
+\DoxyCodeLine{00753\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00754\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00755\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00756\ \ \ \ \ \}}
+\DoxyCodeLine{00757\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00758\ \}}
+\DoxyCodeLine{00759\ }
+\DoxyCodeLine{00760\ \textcolor{keyword}{template}<Numeric\ T,\ Numeric\ U>}
+\DoxyCodeLine{00761\ \textcolor{keywordtype}{bool}\ Utils::IsLowerBounded(\textcolor{keyword}{const}\ std::vector<T>\&\ nums,\ U\ lower\_bound,\ \textcolor{keywordtype}{bool}\ strict)}
+\DoxyCodeLine{00762\ \{}
+\DoxyCodeLine{00763\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ num\ :\ nums)}
+\DoxyCodeLine{00764\ \ \ \ \ \{}
+\DoxyCodeLine{00765\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (num\ <\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(lower\_bound))}
+\DoxyCodeLine{00766\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00767\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00768\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00769\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (strict\ \&\&\ num\ <=\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(lower\_bound))}
+\DoxyCodeLine{00770\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00771\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00772\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00773\ \ \ \ \ \}}
+\DoxyCodeLine{00774\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00775\ \}}
+\DoxyCodeLine{00776\ }
+\DoxyCodeLine{00777\ \textcolor{keyword}{template}<Numeric\ T,\ Numeric\ U>}
+\DoxyCodeLine{00778\ \textcolor{keywordtype}{bool}\ Utils::IsLowerBounded(\textcolor{keyword}{const}\ std::vector<T>\&\ nums,\ \textcolor{keyword}{const}\ std::vector<U>\&\ lower\_bounds,\ \textcolor{keywordtype}{bool}\ strict)}
+\DoxyCodeLine{00779\ \{}
+\DoxyCodeLine{00780\ \ \ \ \ \textcolor{keywordflow}{if}\ (nums.size()\ !=\ lower\_bounds.size())}
+\DoxyCodeLine{00781\ \ \ \ \ \{}
+\DoxyCodeLine{00782\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}[Tensor-\/Utils]\ Bounds\ Checking\ failed:\ array\ size\ mismatch\ with\ \`{}lower\_bounds`."{}});}
+\DoxyCodeLine{00783\ \ \ \ \ \}}
+\DoxyCodeLine{00784\ }
+\DoxyCodeLine{00785\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ nums.size();\ i++)}
+\DoxyCodeLine{00786\ \ \ \ \ \{}
+\DoxyCodeLine{00787\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (nums[i]\ <\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(lower\_bounds[i]))}
+\DoxyCodeLine{00788\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00789\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00790\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00791\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (strict\ \&\&\ nums[i]\ <=\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(lower\_bounds[i]))}
+\DoxyCodeLine{00792\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00793\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00794\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00795\ \ \ \ \ \}}
+\DoxyCodeLine{00796\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00797\ \}}
+\DoxyCodeLine{00798\ }
+\DoxyCodeLine{00799\ }
+\DoxyCodeLine{00800\ \textcolor{comment}{//\ ========================================}}
+\DoxyCodeLine{00801\ \textcolor{comment}{//\ Permutation\ Function(s)}}
+\DoxyCodeLine{00802\ \textcolor{comment}{//\ ========================================}}
+\DoxyCodeLine{00803\ \textcolor{keyword}{template}<Numeric\ T>}
+\DoxyCodeLine{00804\ std::vector<T>\ Utils::Permute(\textcolor{keyword}{const}\ std::vector<T>\&\ nums,\ \textcolor{keyword}{const}\ std::vector<int>\&\ permutation)}
+\DoxyCodeLine{00805\ \{}
+\DoxyCodeLine{00806\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_arithmetic\_v<T>,\ \textcolor{stringliteral}{"{}Permute\ requires\ a\ numeric\ type"{}});}
+\DoxyCodeLine{00807\ }
+\DoxyCodeLine{00808\ \ \ \ \ \textcolor{keywordflow}{if}\ (nums.size()\ !=\ permutation.size())}
+\DoxyCodeLine{00809\ \ \ \ \ \{}
+\DoxyCodeLine{00810\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}[Tensor-\/Utils]\ Permutation\ failed:\ array\ size\ mismatch\ with\ permutation."{}});}
+\DoxyCodeLine{00811\ \ \ \ \ \}}
+\DoxyCodeLine{00812\ }
+\DoxyCodeLine{00813\ \ \ \ \ \textcolor{keywordflow}{if}\ (!Utils::IsBounded(permutation,\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(nums.size()),\ -\/1,\ \textcolor{keyword}{true}))}
+\DoxyCodeLine{00814\ \ \ \ \ \{}
+\DoxyCodeLine{00815\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}[Tensor-\/Utils]\ Permutation\ failed:\ permutation\ values\ are\ not\ bounded."{}});}
+\DoxyCodeLine{00816\ \ \ \ \ \}}
+\DoxyCodeLine{00817\ }
+\DoxyCodeLine{00818\ \ \ \ \ \textcolor{keywordflow}{if}\ (!Utils::IsAllUnique(permutation))}
+\DoxyCodeLine{00819\ \ \ \ \ \{}
+\DoxyCodeLine{00820\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}[Tensor-\/Utils]\ Permutation\ failed:\ duplicate\ values\ found\ in\ permutation\ array."{}});}
+\DoxyCodeLine{00821\ \ \ \ \ \}}
+\DoxyCodeLine{00822\ }
+\DoxyCodeLine{00823\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ n\ =\ nums.size();}
+\DoxyCodeLine{00824\ \ \ \ \ std::vector<T>\ result(n);}
+\DoxyCodeLine{00825\ }
+\DoxyCodeLine{00826\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ n;\ i++)}
+\DoxyCodeLine{00827\ \ \ \ \ \{}
+\DoxyCodeLine{00828\ \ \ \ \ \ \ \ \ result[i]\ =\ nums[\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(permutation[i])];}
+\DoxyCodeLine{00829\ \ \ \ \ \}}
+\DoxyCodeLine{00830\ }
+\DoxyCodeLine{00831\ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00832\ \}}
+\DoxyCodeLine{00833\ }
+\DoxyCodeLine{00834\ }
+\DoxyCodeLine{00835\ \textcolor{comment}{//\ ========================================}}
+\DoxyCodeLine{00836\ \textcolor{comment}{//\ Signal\ Transformation\ Function(s)}}
+\DoxyCodeLine{00837\ \textcolor{comment}{//\ ========================================}}
+\DoxyCodeLine{00838\ \textcolor{keyword}{template}<Numeric\ T,\ Numeric\ U,\ Numeric\ V>}
+\DoxyCodeLine{00839\ std::vector<T>\ Utils::ScaleNShift(\textcolor{keyword}{const}\ std::vector<T>\&\ nums,\ \textcolor{keyword}{const}\ std::vector<U>\&\ scale,\ \textcolor{keyword}{const}\ std::vector<V>\&\ shift)}
+\DoxyCodeLine{00840\ \{}
+\DoxyCodeLine{00841\ \ \ \ \ \textcolor{keywordflow}{if}\ (nums.size()\ !=\ scale.size())}
+\DoxyCodeLine{00842\ \ \ \ \ \{}
+\DoxyCodeLine{00843\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}[Tensor-\/Utils]\ Scaling-\/Shifting\ failed:\ size\ mismatch\ between\ nums\ array\ and\ scale\ array."{}});}
+\DoxyCodeLine{00844\ \ \ \ \ \}}
+\DoxyCodeLine{00845\ }
+\DoxyCodeLine{00846\ \ \ \ \ \textcolor{keywordflow}{if}\ (nums.size()\ !=\ shift.size())}
+\DoxyCodeLine{00847\ \ \ \ \ \{}
+\DoxyCodeLine{00848\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}[Tensor-\/Utils]\ Scaling-\/Shifting\ failed:\ size\ mismatch\ between\ nums\ array\ and\ shift\ array."{}});}
+\DoxyCodeLine{00849\ \ \ \ \ \}}
+\DoxyCodeLine{00850\ }
+\DoxyCodeLine{00851\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ n\ =\ nums.size();}
+\DoxyCodeLine{00852\ \ \ \ \ std::vector<T>\ result(n);}
+\DoxyCodeLine{00853\ }
+\DoxyCodeLine{00854\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ n;\ i++)}
+\DoxyCodeLine{00855\ \ \ \ \ \{}
+\DoxyCodeLine{00856\ \ \ \ \ \ \ \ \ result[i]\ =\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(nums[i]\ *\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(scale[i])\ +\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(shift[i]));}
+\DoxyCodeLine{00857\ \ \ \ \ \}}
+\DoxyCodeLine{00858\ }
+\DoxyCodeLine{00859\ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00860\ \}}
+\DoxyCodeLine{00861\ }
+\DoxyCodeLine{00862\ \textcolor{keyword}{template}<Numeric\ T,\ Numeric\ U,\ Numeric\ V>}
+\DoxyCodeLine{00863\ std::vector<T>\ Utils::ScaleNShift(\textcolor{keyword}{const}\ std::vector<T>\&\ nums,\ \textcolor{keyword}{const}\ std::vector<U>\&\ scale,\ V\ shift)}
+\DoxyCodeLine{00864\ \{}
+\DoxyCodeLine{00865\ \ \ \ \ \textcolor{keywordflow}{if}\ (nums.size()\ !=\ scale.size())}
+\DoxyCodeLine{00866\ \ \ \ \ \{}
+\DoxyCodeLine{00867\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}[Tensor-\/Utils]\ Scaling-\/Shifting\ failed:\ size\ mismatch\ between\ nums\ array\ and\ scale\ array."{}});}
+\DoxyCodeLine{00868\ \ \ \ \ \}}
+\DoxyCodeLine{00869\ }
+\DoxyCodeLine{00870\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ n\ =\ nums.size();}
+\DoxyCodeLine{00871\ \ \ \ \ std::vector<T>\ result(n);}
+\DoxyCodeLine{00872\ }
+\DoxyCodeLine{00873\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ n;\ i++)}
+\DoxyCodeLine{00874\ \ \ \ \ \{}
+\DoxyCodeLine{00875\ \ \ \ \ \ \ \ \ result[i]\ =\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(nums[i]\ *\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(scale[i])\ +\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(shift));}
+\DoxyCodeLine{00876\ \ \ \ \ \}}
+\DoxyCodeLine{00877\ }
+\DoxyCodeLine{00878\ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00879\ \}}
+\DoxyCodeLine{00880\ }
+\DoxyCodeLine{00881\ \textcolor{keyword}{template}<Numeric\ T,\ Numeric\ U,\ Numeric\ V>}
+\DoxyCodeLine{00882\ std::vector<T>\ Utils::ScaleNShift(\textcolor{keyword}{const}\ std::vector<T>\&\ nums,\ U\ scale,\ \textcolor{keyword}{const}\ std::vector<V>\&\ shift)}
+\DoxyCodeLine{00883\ \{}
+\DoxyCodeLine{00884\ \ \ \ \ \textcolor{keywordflow}{if}\ (nums.size()\ !=\ shift.size())}
+\DoxyCodeLine{00885\ \ \ \ \ \{}
+\DoxyCodeLine{00886\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}[Tensor-\/Utils]\ Scaling-\/Shifting\ failed:\ size\ mismatch\ between\ nums\ array\ and\ shift\ array."{}});}
+\DoxyCodeLine{00887\ \ \ \ \ \}}
+\DoxyCodeLine{00888\ }
+\DoxyCodeLine{00889\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ n\ =\ nums.size();}
+\DoxyCodeLine{00890\ \ \ \ \ std::vector<T>\ result(n);}
+\DoxyCodeLine{00891\ }
+\DoxyCodeLine{00892\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ n;\ i++)}
+\DoxyCodeLine{00893\ \ \ \ \ \{}
+\DoxyCodeLine{00894\ \ \ \ \ \ \ \ \ result[i]\ =\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(nums[i]\ *\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(scale)\ +\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(shift[i]));}
+\DoxyCodeLine{00895\ \ \ \ \ \}}
+\DoxyCodeLine{00896\ }
+\DoxyCodeLine{00897\ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00898\ \}}
+\DoxyCodeLine{00899\ }
+\DoxyCodeLine{00900\ \textcolor{keyword}{template}<Numeric\ T,\ Numeric\ U,\ Numeric\ V>}
+\DoxyCodeLine{00901\ std::vector<T>\ Utils::ScaleNShift(\textcolor{keyword}{const}\ std::vector<T>\&\ nums,\ U\ scale,\ V\ shift)}
+\DoxyCodeLine{00902\ \{}
+\DoxyCodeLine{00903\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ n\ =\ nums.size();}
+\DoxyCodeLine{00904\ \ \ \ \ std::vector<T>\ result(n);}
+\DoxyCodeLine{00905\ }
+\DoxyCodeLine{00906\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ n;\ i++)}
+\DoxyCodeLine{00907\ \ \ \ \ \{}
+\DoxyCodeLine{00908\ \ \ \ \ \ \ \ \ result[i]\ =\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(nums[i]\ *\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(scale)\ +\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(shift));}
+\DoxyCodeLine{00909\ \ \ \ \ \}}
+\DoxyCodeLine{00910\ }
+\DoxyCodeLine{00911\ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00912\ \}}
+\DoxyCodeLine{00913\ }
+\DoxyCodeLine{00914\ }
+\DoxyCodeLine{00915\ \textcolor{comment}{//\ ========================================}}
+\DoxyCodeLine{00916\ \textcolor{comment}{//\ Vector\ \&\ Matrix\ Operation\ Function(s)}}
+\DoxyCodeLine{00917\ \textcolor{comment}{//\ ========================================}}
+\DoxyCodeLine{00918\ \textcolor{keyword}{template}<Numeric\ T>}
+\DoxyCodeLine{00919\ \textcolor{keywordtype}{bool}\ Utils::IsRectangular(\textcolor{keyword}{const}\ std::vector<std::vector<T>>\&\ matrix)}
+\DoxyCodeLine{00920\ \{}
+\DoxyCodeLine{00921\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_arithmetic\_v<T>,\ \textcolor{stringliteral}{"{}IsRectangular\ requires\ a\ numeric\ type"{}});}
+\DoxyCodeLine{00922\ }
+\DoxyCodeLine{00923\ \ \ \ \ \textcolor{keywordflow}{if}\ (matrix.empty())}
+\DoxyCodeLine{00924\ \ \ \ \ \{}
+\DoxyCodeLine{00925\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00926\ \ \ \ \ \}}
+\DoxyCodeLine{00927\ }
+\DoxyCodeLine{00928\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ columns\ =\ matrix[0].size();}
+\DoxyCodeLine{00929\ }
+\DoxyCodeLine{00930\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ row\ :\ matrix)}
+\DoxyCodeLine{00931\ \ \ \ \ \{}
+\DoxyCodeLine{00932\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (row.size()\ !=\ columns)}
+\DoxyCodeLine{00933\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00934\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00935\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00936\ \ \ \ \ \}}
+\DoxyCodeLine{00937\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00938\ \}}
+\DoxyCodeLine{00939\ }
+\DoxyCodeLine{00940\ \textcolor{keyword}{template}<Numeric\ T>}
+\DoxyCodeLine{00941\ std::vector<std::vector<T>>\ Utils::TransposeMatrix(\textcolor{keyword}{const}\ std::vector<std::vector<T>>\&\ matrix)}
+\DoxyCodeLine{00942\ \{}
+\DoxyCodeLine{00943\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_arithmetic\_v<T>,\ \textcolor{stringliteral}{"{}TransposeMatrix\ requires\ a\ numeric\ type"{}});}
+\DoxyCodeLine{00944\ }
+\DoxyCodeLine{00945\ \ \ \ \ \textcolor{keywordflow}{if}\ (matrix.empty())}
+\DoxyCodeLine{00946\ \ \ \ \ \{}
+\DoxyCodeLine{00947\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \{\};}
+\DoxyCodeLine{00948\ \ \ \ \ \}}
+\DoxyCodeLine{00949\ }
+\DoxyCodeLine{00950\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ rows\ =\ matrix.size();}
+\DoxyCodeLine{00951\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ columns\ =\ matrix[0].size();}
+\DoxyCodeLine{00952\ }
+\DoxyCodeLine{00953\ \ \ \ \ \textcolor{keywordflow}{if}\ (!Utils::IsRectangular(matrix))}
+\DoxyCodeLine{00954\ \ \ \ \ \{}
+\DoxyCodeLine{00955\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}[Tensor-\/Utils]\ Transposing\ Matrix\ failed:\ input\ is\ not\ a\ rectangular\ matrix."{}});}
+\DoxyCodeLine{00956\ \ \ \ \ \}}
+\DoxyCodeLine{00957\ }
+\DoxyCodeLine{00958\ \ \ \ \ std::vector<std::vector<T>>\ transposed\_matrix(columns,\ std::vector<T>(rows));}
+\DoxyCodeLine{00959\ }
+\DoxyCodeLine{00960\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ columns;\ i++)}
+\DoxyCodeLine{00961\ \ \ \ \ \{}
+\DoxyCodeLine{00962\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ j\ =\ 0;\ j\ <\ rows;\ j++)}
+\DoxyCodeLine{00963\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00964\ \ \ \ \ \ \ \ \ \ \ \ \ transposed\_matrix[i][j]\ =\ matrix[j][i];}
+\DoxyCodeLine{00965\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00966\ \ \ \ \ \}}
+\DoxyCodeLine{00967\ }
+\DoxyCodeLine{00968\ \ \ \ \ \textcolor{keywordflow}{return}\ transposed\_matrix;}
+\DoxyCodeLine{00969\ \}}
+\DoxyCodeLine{00970\ }
+\DoxyCodeLine{00971\ \textcolor{keyword}{template}<Numeric\ T>}
+\DoxyCodeLine{00972\ std::vector<std::vector<T>>\ Utils::StandardMatrixMultiply(\textcolor{keyword}{const}\ std::vector<std::vector<T>>\&\ matrix\_1,\ \textcolor{keyword}{const}\ std::vector<std::vector<T>>\&\ matrix\_2)}
+\DoxyCodeLine{00973\ \{}
+\DoxyCodeLine{00974\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_arithmetic\_v<T>,\ \textcolor{stringliteral}{"{}StandardMatrixMultiply\ requires\ a\ numeric\ type"{}});}
+\DoxyCodeLine{00975\ }
+\DoxyCodeLine{00976\ \ \ \ \ \textcolor{keywordflow}{if}\ (matrix\_1.empty()\ ||\ matrix\_2.empty())}
+\DoxyCodeLine{00977\ \ \ \ \ \{}
+\DoxyCodeLine{00978\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}[Tensor-\/Utils]\ Matrix\ Multiplication\ failed:\ input\ matrices\ must\ not\ be\ empty."{}});}
+\DoxyCodeLine{00979\ \ \ \ \ \}}
+\DoxyCodeLine{00980\ }
+\DoxyCodeLine{00981\ \ \ \ \ \textcolor{keywordflow}{if}\ (matrix\_1[0].size()\ !=\ matrix\_2.size())}
+\DoxyCodeLine{00982\ \ \ \ \ \{}
+\DoxyCodeLine{00983\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}[Tensor-\/Utils]\ Matrix\ Multiplication\ failed:\ matrix\ shapes\ are\ not\ compatible\ for\ matrix\ multiplication."{}});}
+\DoxyCodeLine{00984\ \ \ \ \ \}}
+\DoxyCodeLine{00985\ }
+\DoxyCodeLine{00986\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ rows\ =\ matrix\_1.size();}
+\DoxyCodeLine{00987\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ columns\ =\ matrix\_2[0].size();}
+\DoxyCodeLine{00988\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ inner\ =\ matrix\_2.size();}
+\DoxyCodeLine{00989\ }
+\DoxyCodeLine{00990\ \ \ \ \ \textcolor{keywordflow}{if}\ (!Utils::IsRectangular(matrix\_1))}
+\DoxyCodeLine{00991\ \ \ \ \ \{}
+\DoxyCodeLine{00992\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}[Tensor-\/Utils]\ Matrix\ Multiplication\ failed:\ first\ matrix\ is\ not\ rectangular."{}});}
+\DoxyCodeLine{00993\ \ \ \ \ \}}
+\DoxyCodeLine{00994\ }
+\DoxyCodeLine{00995\ \ \ \ \ \textcolor{keywordflow}{if}\ (!Utils::IsRectangular(matrix\_2))}
+\DoxyCodeLine{00996\ \ \ \ \ \{}
+\DoxyCodeLine{00997\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}[Tensor-\/Utils]\ Matrix\ Multiplication\ failed:\ second\ matrix\ is\ not\ rectangular."{}});}
+\DoxyCodeLine{00998\ \ \ \ \ \}}
+\DoxyCodeLine{00999\ }
+\DoxyCodeLine{01000\ \ \ \ \ std::vector<std::vector<T>>\ result(rows,\ std::vector<T>(columns,\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(0)));}
+\DoxyCodeLine{01001\ }
+\DoxyCodeLine{01002\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ rows;\ i++)}
+\DoxyCodeLine{01003\ \ \ \ \ \{}
+\DoxyCodeLine{01004\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ j\ =\ 0;\ j\ <\ columns;\ j++)}
+\DoxyCodeLine{01005\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01006\ \ \ \ \ \ \ \ \ \ \ \ \ T\ sum\ =\ \textcolor{keyword}{static\_cast<}T\textcolor{keyword}{>}(0);}
+\DoxyCodeLine{01007\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ k\ =\ 0;\ k\ <\ inner;\ k++)}
+\DoxyCodeLine{01008\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01009\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sum\ +=\ (matrix\_1[i][k]\ *\ matrix\_2[k][j]);}
+\DoxyCodeLine{01010\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01011\ \ \ \ \ \ \ \ \ \ \ \ \ result[i][j]\ =\ sum;}
+\DoxyCodeLine{01012\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01013\ \ \ \ \ \}}
+\DoxyCodeLine{01014\ }
+\DoxyCodeLine{01015\ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{01016\ \}}
+\DoxyCodeLine{01017\ }
+\DoxyCodeLine{01018\ \textcolor{keyword}{template}<Numeric\ T>}
+\DoxyCodeLine{01019\ std::vector<T>\ Utils::MatrixToVector(\textcolor{keyword}{const}\ std::vector<std::vector<T>>\&\ matrix)}
+\DoxyCodeLine{01020\ \{}
+\DoxyCodeLine{01021\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_arithmetic\_v<T>,\ \textcolor{stringliteral}{"{}MatrixToVector\ requires\ a\ numeric\ type"{}});}
+\DoxyCodeLine{01022\ }
+\DoxyCodeLine{01023\ \ \ \ \ \textcolor{keywordflow}{if}\ (matrix.empty())}
+\DoxyCodeLine{01024\ \ \ \ \ \{}
+\DoxyCodeLine{01025\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \{\};}
+\DoxyCodeLine{01026\ \ \ \ \ \}}
+\DoxyCodeLine{01027\ }
+\DoxyCodeLine{01028\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ rows\ =\ matrix.size();}
+\DoxyCodeLine{01029\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ columns\ =\ matrix[0].size();}
+\DoxyCodeLine{01030\ }
+\DoxyCodeLine{01031\ \ \ \ \ std::vector<T>\ nums;}
+\DoxyCodeLine{01032\ \ \ \ \ nums.reserve(rows\ *\ columns);}
+\DoxyCodeLine{01033\ }
+\DoxyCodeLine{01034\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ rows;\ i++)}
+\DoxyCodeLine{01035\ \ \ \ \ \{}
+\DoxyCodeLine{01036\ \ \ \ \ \ \ \ \ nums.insert(nums.end(),\ matrix[i].begin(),\ matrix[i].end());}
+\DoxyCodeLine{01037\ \ \ \ \ \}}
+\DoxyCodeLine{01038\ }
+\DoxyCodeLine{01039\ \ \ \ \ \textcolor{keywordflow}{return}\ nums;}
+\DoxyCodeLine{01040\ \}}
+\DoxyCodeLine{01041\ }
+\DoxyCodeLine{01042\ \textcolor{keyword}{template}<Numeric\ T>}
+\DoxyCodeLine{01043\ std::vector<std::vector<T>>\ Utils::VectorToMatrix(\textcolor{keyword}{const}\ std::vector<T>\&\ vec,\ std::pair<int,\ int>\ shape)}
+\DoxyCodeLine{01044\ \{}
+\DoxyCodeLine{01045\ \ \ \ \ \textcolor{keyword}{static\_assert}(std::is\_arithmetic\_v<T>,\ \textcolor{stringliteral}{"{}VectorToMatrix\ requires\ a\ numeric\ type"{}});}
+\DoxyCodeLine{01046\ }
+\DoxyCodeLine{01047\ \ \ \ \ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ expected\ =\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\textcolor{keyword}{>}(shape.first)\ *\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\textcolor{keyword}{>}(shape.second);}
+\DoxyCodeLine{01048\ \ \ \ \ \textcolor{keywordflow}{if}\ (expected\ !=\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\textcolor{keyword}{>}(vec.size()))}
+\DoxyCodeLine{01049\ \ \ \ \ \{}
+\DoxyCodeLine{01050\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::invalid\_argument(\textcolor{stringliteral}{"{}[Tensor-\/Utils]\ Vector\ Conversion\ to\ Matrix\ failed:\ vector\ size\ mismatch\ with\ volume\ of\ shape."{}});}
+\DoxyCodeLine{01051\ \ \ \ \ \}}
+\DoxyCodeLine{01052\ }
+\DoxyCodeLine{01053\ \ \ \ \ std::vector<std::vector<T>>\ matrix(shape.first,\ std::vector<T>(shape.second));}
+\DoxyCodeLine{01054\ }
+\DoxyCodeLine{01055\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ vec.size();\ i++)}
+\DoxyCodeLine{01056\ \ \ \ \ \{}
+\DoxyCodeLine{01057\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ k1\ =\ i\ /\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(shape.second);}
+\DoxyCodeLine{01058\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ k2\ =\ i\ \%\ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(shape.second);}
+\DoxyCodeLine{01059\ \ \ \ \ \ \ \ \ matrix[k1][k2]\ =\ vec[i];}
+\DoxyCodeLine{01060\ \ \ \ \ \}}
+\DoxyCodeLine{01061\ }
+\DoxyCodeLine{01062\ \ \ \ \ \textcolor{keywordflow}{return}\ matrix;}
+\DoxyCodeLine{01063\ \}}
+
+\end{DoxyCode}

@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{27f617d6-1bb2-48d6-a180-de56de209c8b}</ProjectGuid>
+    <RootNamespace>Tensor</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Abs.h" />
+    <ClInclude Include="Acos.h" />
+    <ClInclude Include="Acosh.h" />
+    <ClInclude Include="Acot.h" />
+    <ClInclude Include="Acoth.h" />
+    <ClInclude Include="Acsc.h" />
+    <ClInclude Include="Acsch.h" />
+    <ClInclude Include="Activation.h" />
+    <ClInclude Include="ArcTan.h" />
+    <ClInclude Include="Asec.h" />
+    <ClInclude Include="Asech.h" />
+    <ClInclude Include="Asin.h" />
+    <ClInclude Include="Asinh.h" />
+    <ClInclude Include="Atan.h" />
+    <ClInclude Include="Atanh.h" />
+    <ClInclude Include="BaseActivation.h" />
+    <ClInclude Include="BinaryStep.h" />
+    <ClInclude Include="Ceil.h" />
+    <ClInclude Include="Clip.h" />
+    <ClInclude Include="Cos.h" />
+    <ClInclude Include="Cosh.h" />
+    <ClInclude Include="Cot.h" />
+    <ClInclude Include="Coth.h" />
+    <ClInclude Include="Csc.h" />
+    <ClInclude Include="Csch.h" />
+    <ClInclude Include="ELU.h" />
+    <ClInclude Include="Exp.h" />
+    <ClInclude Include="Exponential.h" />
+    <ClInclude Include="Floor.h" />
+    <ClInclude Include="Gaussian.h" />
+    <ClInclude Include="GELU.h" />
+    <ClInclude Include="HardShrink.h" />
+    <ClInclude Include="HardSigmoid.h" />
+    <ClInclude Include="HardSwish.h" />
+    <ClInclude Include="HardTanh.h" />
+    <ClInclude Include="Initializer.h" />
+    <ClInclude Include="LeakyReLU.h" />
+    <ClInclude Include="Linear.h" />
+    <ClInclude Include="Log.h" />
+    <ClInclude Include="LogSigmoid.h" />
+    <ClInclude Include="LogSoftmax.h" />
+    <ClInclude Include="BaseOperation.h" />
+    <ClInclude Include="Matrix.h" />
+    <ClInclude Include="Mish.h" />
+    <ClInclude Include="Mod.h" />
+    <ClInclude Include="Power.h" />
+    <ClInclude Include="PReLU.h" />
+    <ClInclude Include="ReLU.h" />
+    <ClInclude Include="ReLU6.h" />
+    <ClInclude Include="Round.h" />
+    <ClInclude Include="ScalarActivation.h" />
+    <ClInclude Include="Sec.h" />
+    <ClInclude Include="Sech.h" />
+    <ClInclude Include="SELU.h" />
+    <ClInclude Include="Sigmoid.h" />
+    <ClInclude Include="Sin.h" />
+    <ClInclude Include="Sinh.h" />
+    <ClInclude Include="Softmax.h" />
+    <ClInclude Include="Softplus.h" />
+    <ClInclude Include="SoftShrink.h" />
+    <ClInclude Include="Softsign.h" />
+    <ClInclude Include="Sparsemax.h" />
+    <ClInclude Include="SparsePlus.h" />
+    <ClInclude Include="Sqrt.h" />
+    <ClInclude Include="SquarePlus.h" />
+    <ClInclude Include="Swish.h" />
+    <ClInclude Include="Tan.h" />
+    <ClInclude Include="TanhShrink.h" />
+    <ClInclude Include="_Tanh.h" />
+    <ClInclude Include="Tensor.h" />
+    <ClInclude Include="TensorActivation.h" />
+    <ClInclude Include="Math.h" />
+    <ClInclude Include="TensorSlice.h" />
+    <ClInclude Include="Utils.h" />
+    <ClInclude Include="Tanh.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Abs.cpp" />
+    <ClCompile Include="Acos.cpp" />
+    <ClCompile Include="Acosh.cpp" />
+    <ClCompile Include="Acot.cpp" />
+    <ClCompile Include="Acoth.cpp" />
+    <ClCompile Include="Acsc.cpp" />
+    <ClCompile Include="Acsch.cpp" />
+    <ClCompile Include="Activation.cpp" />
+    <ClCompile Include="ArcTan.cpp" />
+    <ClCompile Include="Asec.cpp" />
+    <ClCompile Include="Asech.cpp" />
+    <ClCompile Include="Asin.cpp" />
+    <ClCompile Include="Asinh.cpp" />
+    <ClCompile Include="Atan.cpp" />
+    <ClCompile Include="Atanh.cpp" />
+    <ClCompile Include="BaseActivation.cpp" />
+    <ClCompile Include="BinaryStep.cpp" />
+    <ClCompile Include="Ceil.cpp" />
+    <ClCompile Include="Clip.cpp" />
+    <ClCompile Include="Cos.cpp" />
+    <ClCompile Include="Cosh.cpp" />
+    <ClCompile Include="Cot.cpp" />
+    <ClCompile Include="Coth.cpp" />
+    <ClCompile Include="Csc.cpp" />
+    <ClCompile Include="Csch.cpp" />
+    <ClCompile Include="ELU.cpp" />
+    <ClCompile Include="Exp.cpp" />
+    <ClCompile Include="Exponential.cpp" />
+    <ClCompile Include="Floor.cpp" />
+    <ClCompile Include="Gaussian.cpp" />
+    <ClCompile Include="GELU.cpp" />
+    <ClCompile Include="HardShrink.cpp" />
+    <ClCompile Include="HardSigmoid.cpp" />
+    <ClCompile Include="HardSwish.cpp" />
+    <ClCompile Include="HardTanh.cpp" />
+    <ClCompile Include="Initializer.cpp" />
+    <ClCompile Include="LeakyReLU.cpp" />
+    <ClCompile Include="Linear.cpp" />
+    <ClCompile Include="Log.cpp" />
+    <ClCompile Include="LogSigmoid.cpp" />
+    <ClCompile Include="LogSoftmax.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="BaseOperation.cpp" />
+    <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="Mish.cpp" />
+    <ClCompile Include="Mod.cpp" />
+    <ClCompile Include="Power.cpp" />
+    <ClCompile Include="PReLU.cpp" />
+    <ClCompile Include="ReLU.cpp" />
+    <ClCompile Include="ReLU6.cpp" />
+    <ClCompile Include="Round.cpp" />
+    <ClCompile Include="ScalarActivation.cpp" />
+    <ClCompile Include="Sec.cpp" />
+    <ClCompile Include="Sech.cpp" />
+    <ClCompile Include="SELU.cpp" />
+    <ClCompile Include="Sigmoid.cpp" />
+    <ClCompile Include="Sin.cpp" />
+    <ClCompile Include="Sinh.cpp" />
+    <ClCompile Include="Softmax.cpp" />
+    <ClCompile Include="Softplus.cpp" />
+    <ClCompile Include="SoftShrink.cpp" />
+    <ClCompile Include="Softsign.cpp" />
+    <ClCompile Include="Sparsemax.cpp" />
+    <ClCompile Include="SparsePlus.cpp" />
+    <ClCompile Include="Sqrt.cpp" />
+    <ClCompile Include="SquarePlus.cpp" />
+    <ClCompile Include="Swish.cpp" />
+    <ClCompile Include="Tan.cpp" />
+    <ClCompile Include="TanhShrink.cpp" />
+    <ClCompile Include="_Tanh.cpp" />
+    <ClCompile Include="Tensor.cpp" />
+    <ClCompile Include="TensorActivation.cpp" />
+    <ClCompile Include="Math.cpp" />
+    <ClCompile Include="TensorSlice.cpp" />
+    <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="Tanh.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

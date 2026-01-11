@@ -1,0 +1,254 @@
+\doxysection{Tensor.\+h}
+\hypertarget{_tensor_8h_source}{}\label{_tensor_8h_source}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}Utils.h"{}}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}TensorSlice.h"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <cmath>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <climits>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <limits>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <map>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <algorithm>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <numeric>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <numbers>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ <stdexcept>}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_tensor_slice}{TensorSlice}};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{class\ }Tensor}
+\DoxyCodeLine{00022\ \{}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }TensorSlice;}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{int}\ rank\ =\ 0;}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{int}\ volume\ =\ 0;}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00047\ \ \ \ \ std::shared\_ptr<std::vector<double>>\ data;}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00055\ \ \ \ \ std::vector<int>\ shape;}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00064\ \ \ \ \ std::vector<int>\ strides;}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordtype}{int}\ start\ =\ 0;}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{int}\ end\ =\ 0;}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ EPSILON\_SCALE\ =\ 1e6;}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00100\ \ \ \ \ Tensor\ GetSlice(\textcolor{keywordtype}{int}\ index)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keywordtype}{void}\ SetSlice(\textcolor{keywordtype}{int}\ index,\ \textcolor{keyword}{const}\ Tensor\ \&source);}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00135\ \ \ \ \ Tensor\ GetSliceChain(\textcolor{keyword}{const}\ std::vector<int>\ \&indices)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{keywordtype}{void}\ SetSliceChain(\textcolor{keyword}{const}\ std::vector<int>\ \&indices,\ \textcolor{keyword}{const}\ Tensor\ \&source);}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00157\ \ \ \ \ Tensor()\ \{\}}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00188\ \ \ \ \ Tensor(\textcolor{keyword}{const}\ std::vector<int>\ \&shape,\ \textcolor{keywordtype}{double}\ value\ =\ 0);}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00225\ \ \ \ \ Tensor(\textcolor{keyword}{const}\ std::vector<int>\ \&shape,\ \textcolor{keyword}{const}\ std::vector<double>\ \&data);}
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00251\ \ \ \ \ Tensor(\textcolor{keyword}{const}\ Tensor\ \&tensor);}
+\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00274\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_tensor_ac9b2a793615586ac29b2e7215261b844}{UniqueData}}();}
+\DoxyCodeLine{00275\ }
+\DoxyCodeLine{00302\ \ \ \ \ TensorSlice\ \mbox{\hyperlink{class_tensor_a039914aee51bfae847dbe28209ad69ff}{operator[]}}(\textcolor{keywordtype}{int}\ index);}
+\DoxyCodeLine{00303\ }
+\DoxyCodeLine{00325\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a039914aee51bfae847dbe28209ad69ff}{operator[]}}(\textcolor{keywordtype}{int}\ index)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00326\ }
+\DoxyCodeLine{00351\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a0b7d70c72543fd055cdb101b73cec827}{operator=}}(\textcolor{keyword}{const}\ Tensor\ \&tensor);}
+\DoxyCodeLine{00352\ }
+\DoxyCodeLine{00368\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a47812d7a29b100dd87bcd67e91c64482}{operator+}}(\textcolor{keywordtype}{double}\ value)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00369\ }
+\DoxyCodeLine{00385\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_aaab66abb66d3aa8ac54b985cade60f7e}{operator-\/}}(\textcolor{keywordtype}{double}\ value)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00386\ }
+\DoxyCodeLine{00402\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a6658b84a8e2b71220c7f55f8610e6bbe}{operator*}}(\textcolor{keywordtype}{double}\ value)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00403\ }
+\DoxyCodeLine{00426\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_ac7a5df6dc6c7857650e0adbf66b4c422}{operator/}}(\textcolor{keywordtype}{double}\ value)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00427\ }
+\DoxyCodeLine{00449\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a47812d7a29b100dd87bcd67e91c64482}{operator+}}(\textcolor{keyword}{const}\ Tensor\ \&tensor)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00450\ }
+\DoxyCodeLine{00470\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_aaab66abb66d3aa8ac54b985cade60f7e}{operator-\/}}(\textcolor{keyword}{const}\ Tensor\ \&tensor)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00471\ }
+\DoxyCodeLine{00493\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a6658b84a8e2b71220c7f55f8610e6bbe}{operator*}}(\textcolor{keyword}{const}\ Tensor\ \&tensor)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00494\ }
+\DoxyCodeLine{00520\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_ac7a5df6dc6c7857650e0adbf66b4c422}{operator/}}(\textcolor{keyword}{const}\ Tensor\ \&tensor)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00521\ }
+\DoxyCodeLine{00538\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_tensor_a45a758479b01bfce56ca3c7bede0493b}{operator+=}}(\textcolor{keywordtype}{double}\ value);}
+\DoxyCodeLine{00539\ }
+\DoxyCodeLine{00557\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_tensor_a7e6db16f013c048474b050fda7da2a01}{operator-\/=}}(\textcolor{keywordtype}{double}\ value);}
+\DoxyCodeLine{00558\ }
+\DoxyCodeLine{00576\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_tensor_a81868ded9686e9083f30666e68fdef6e}{operator*=}}(\textcolor{keywordtype}{double}\ value);}
+\DoxyCodeLine{00577\ }
+\DoxyCodeLine{00600\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_tensor_a513698bd5959d9c531849c91ef8c4c6a}{operator/=}}(\textcolor{keywordtype}{double}\ value);}
+\DoxyCodeLine{00601\ }
+\DoxyCodeLine{00623\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_tensor_a45a758479b01bfce56ca3c7bede0493b}{operator+=}}(\textcolor{keyword}{const}\ Tensor\ \&tensor);}
+\DoxyCodeLine{00624\ }
+\DoxyCodeLine{00646\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_tensor_a7e6db16f013c048474b050fda7da2a01}{operator-\/=}}(\textcolor{keyword}{const}\ Tensor\ \&tensor);}
+\DoxyCodeLine{00647\ }
+\DoxyCodeLine{00672\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_tensor_a81868ded9686e9083f30666e68fdef6e}{operator*=}}(\textcolor{keyword}{const}\ Tensor\ \&tensor);}
+\DoxyCodeLine{00673\ }
+\DoxyCodeLine{00701\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_tensor_a513698bd5959d9c531849c91ef8c4c6a}{operator/=}}(\textcolor{keyword}{const}\ Tensor\ \&tensor);}
+\DoxyCodeLine{00702\ }
+\DoxyCodeLine{00725\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a50ffbfbb2e300be5346c894226d72812}{Reshape}}(\textcolor{keyword}{const}\ std::vector<int>\ \&new\_shape)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00726\ }
+\DoxyCodeLine{00753\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_aa5215a8751f54d02e66b38c4982537f9}{ExpandRank}}(\textcolor{keywordtype}{int}\ axis\ =\ 0)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00754\ }
+\DoxyCodeLine{00787\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_ab580be2efba7d27e6b6da689eee4732e}{Flatten}}(\textcolor{keywordtype}{int}\ axis\_from,\ \textcolor{keywordtype}{int}\ axis\_upto)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00788\ }
+\DoxyCodeLine{00819\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_acdf40158e4bd7edd14f59bfc2c52ff92}{Slice}}(\textcolor{keywordtype}{int}\ axis,\ \textcolor{keywordtype}{int}\ index)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00820\ }
+\DoxyCodeLine{00862\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_acdf40158e4bd7edd14f59bfc2c52ff92}{Slice}}(\textcolor{keywordtype}{int}\ axis,\ \textcolor{keywordtype}{int}\ index\_from,\ \textcolor{keywordtype}{int}\ index\_upto)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00863\ }
+\DoxyCodeLine{00900\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_tensor_a91a2c79fe15521fb9a3742da4263f60c}{Append}}(\textcolor{keyword}{const}\ Tensor\ \&tensor,\ \textcolor{keywordtype}{int}\ axis\ =\ -\/1);}
+\DoxyCodeLine{00901\ }
+\DoxyCodeLine{00948\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_tensor_aee9562ed6e3368ac6cd664373556cca4}{Insert}}(\textcolor{keyword}{const}\ Tensor\ \&tensor,\ \textcolor{keywordtype}{int}\ axis\ =\ -\/1,\ \textcolor{keywordtype}{int}\ index\ =\ 0);}
+\DoxyCodeLine{00949\ }
+\DoxyCodeLine{00989\ \ \ \ \ \textcolor{keyword}{static}\ Tensor\ \mbox{\hyperlink{class_tensor_a4d525a3d5051c3a704db5a254b654706}{Concat}}(\textcolor{keyword}{const}\ std::vector<Tensor>\ \&tensors,\ \textcolor{keywordtype}{int}\ axis\ =\ -\/1);}
+\DoxyCodeLine{00990\ }
+\DoxyCodeLine{01027\ \ \ \ \ \textcolor{keyword}{static}\ Tensor\ \mbox{\hyperlink{class_tensor_a7d2ad35ec705991518a2ecbec8ffd318}{Stack}}(\textcolor{keyword}{const}\ std::vector<Tensor>\ \&tensors,\ \textcolor{keywordtype}{int}\ axis\ =\ 0);}
+\DoxyCodeLine{01028\ }
+\DoxyCodeLine{01069\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_af7dda240cea62631125c2272e38ffaa1}{Pad}}(\textcolor{keywordtype}{int}\ axis,\ \textcolor{keywordtype}{int}\ pad\_before\_size,\ \textcolor{keywordtype}{int}\ pad\_after\_size,\ \textcolor{keywordtype}{double}\ value\ =\ 0.0)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01070\ }
+\DoxyCodeLine{01104\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a52b3acaaf5f1d9bad285fd7ae88399ac}{Tile}}(\textcolor{keyword}{const}\ std::vector<int>\ \&repetitions)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01105\ }
+\DoxyCodeLine{01135\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_aa5fba58b033578d704f4634977982c66}{Broadcast}}(\textcolor{keyword}{const}\ std::vector<int>\&\ shape)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01136\ }
+\DoxyCodeLine{01169\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a699a4b1ec7d7d244e7c10643bf533f98}{Transpose}}(\textcolor{keyword}{const}\ std::vector<int>\&\ permutation)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01170\ }
+\DoxyCodeLine{01201\ \ \ \ \ \textcolor{keyword}{static}\ Tensor\ \mbox{\hyperlink{class_tensor_a33ee78056cb83d4381fdcbe3c79cde96}{MatMul}}(\textcolor{keyword}{const}\ Tensor\&\ tensor\_1,\ \textcolor{keyword}{const}\ Tensor\&\ tensor\_2);}
+\DoxyCodeLine{01202\ }
+\DoxyCodeLine{01214\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a33ee78056cb83d4381fdcbe3c79cde96}{MatMul}}(\textcolor{keyword}{const}\ Tensor\&\ tensor)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01215\ }
+\DoxyCodeLine{01250\ \ \ \ \ \textcolor{keyword}{static}\ Tensor\ \mbox{\hyperlink{class_tensor_abde6f09589147296a9035bce10cc8c49}{TensorDot}}(\textcolor{keyword}{const}\ Tensor\&\ tensor\_1,\ \textcolor{keyword}{const}\ Tensor\&\ tensor\_2,\ \textcolor{keyword}{const}\ std::vector<int>\&\ contract\_axes\_1,\ \textcolor{keyword}{const}\ std::vector<int>\&\ contract\_axes\_2);}
+\DoxyCodeLine{01251\ }
+\DoxyCodeLine{01316\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_ae88a978596e4f4d82ca5a27b8b79073f}{Convolve}}(\textcolor{keyword}{const}\ Tensor\&\ filter,\ \textcolor{keyword}{const}\ std::vector<int>\&\ strides,\ \textcolor{keyword}{const}\ std::vector<int>\&\ padding);}
+\DoxyCodeLine{01317\ }
+\DoxyCodeLine{01364\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_ad378cc1c1af81074204c05bc0ff4f00d}{MaxPool}}(\textcolor{keyword}{const}\ std::vector<int>\&\ pool\_shape,\ \textcolor{keyword}{const}\ std::vector<int>\&\ strides\ =\ \{\});}
+\DoxyCodeLine{01365\ }
+\DoxyCodeLine{01413\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_ad1f64c43e7267629a150a2cc7d7ad75b}{MinPool}}(\textcolor{keyword}{const}\ std::vector<int>\&\ pool\_shape,\ \textcolor{keyword}{const}\ std::vector<int>\&\ strides\ =\ \{\});}
+\DoxyCodeLine{01414\ }
+\DoxyCodeLine{01467\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a40fb78ab8fbcfab0ab57eeaa5c05676a}{AvgPool}}(\textcolor{keyword}{const}\ std::vector<int>\&\ pool\_shape,\ \textcolor{keyword}{const}\ std::vector<int>\&\ strides\ =\ \{\});}
+\DoxyCodeLine{01468\ }
+\DoxyCodeLine{01489\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_af2642442d55d275a7a21fca2e3dfb4b5}{Sign}}(\textcolor{keywordtype}{bool}\ heaviside\ =\ \textcolor{keyword}{false})\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01490\ }
+\DoxyCodeLine{01506\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a34014716594913b10f8c606c0b0389de}{ReduceSum}}(\textcolor{keywordtype}{int}\ axis\ =\ 0)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01507\ }
+\DoxyCodeLine{01524\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a279fd0fb9be2315140b21feeb2e51034}{ReduceMean}}(\textcolor{keywordtype}{int}\ axis\ =\ 0)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01525\ }
+\DoxyCodeLine{01546\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_aa5366dcad0b31362b2c4a42c7452adcf}{ReduceVar}}(\textcolor{keywordtype}{int}\ axis\ =\ 0,\ \textcolor{keywordtype}{bool}\ inference\ =\ \textcolor{keyword}{false})\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01547\ }
+\DoxyCodeLine{01563\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a4f4b299f874a72509a053c270bbb0aa9}{ReduceMax}}(\textcolor{keywordtype}{int}\ axis\ =\ 0)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01564\ }
+\DoxyCodeLine{01580\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a3e92b91cfe84cfd666751d7f5431a642}{ReduceMin}}(\textcolor{keywordtype}{int}\ axis\ =\ 0)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01581\ }
+\DoxyCodeLine{01592\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_tensor_adb9ce076a4629b3bbc897e17f39b7573}{Sum}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01593\ }
+\DoxyCodeLine{01606\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_tensor_aac4651bb52521e86e875d2e8c1e8643a}{Mean}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01607\ }
+\DoxyCodeLine{01624\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_tensor_aceb3777b0c462d3596781b6031a234b6}{Var}}(\textcolor{keywordtype}{bool}\ inference\ =\ \textcolor{keyword}{false})\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01625\ }
+\DoxyCodeLine{01636\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_tensor_a46e3d36946b41f93fef4b0edcc48ba2e}{Max}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01637\ }
+\DoxyCodeLine{01648\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_tensor_a759daa212e3786fda070af4732f3ee15}{Min}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01649\ }
+\DoxyCodeLine{01663\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_aa9330e265d36beb2e217c75f6a03a41e}{Abs}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01664\ }
+\DoxyCodeLine{01678\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a6ecaeb0e29c326798d82d6a2cccc28cf}{Floor}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01679\ }
+\DoxyCodeLine{01693\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_ac1228f81de00883e64f49ee19e7d6021}{Ceil}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01694\ }
+\DoxyCodeLine{01712\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a0f50736794c3594411fe96aeb337b7b5}{Round}}(\textcolor{keywordtype}{int}\ decimal\_place\ =\ 0)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01713\ }
+\DoxyCodeLine{01740\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a7de1cf7ec97265fcb0f776ea47fd9236}{Clip}}(\textcolor{keywordtype}{double}\ min\_value,\ \textcolor{keywordtype}{double}\ max\_value)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01741\ }
+\DoxyCodeLine{01766\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a0bb8eea690681cb13ffbe53fa66d7183}{Power}}(\textcolor{keywordtype}{double}\ exponent)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01767\ }
+\DoxyCodeLine{01784\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a4c7df16dc4a4fc10cbdf5bfa20e25ba7}{Sqrt}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01785\ }
+\DoxyCodeLine{01814\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a40481e1178fdb80dae8934a8ed75adbb}{Log}}(\textcolor{keywordtype}{double}\ base\ =\ std::numbers::e)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01815\ }
+\DoxyCodeLine{01837\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_ae9f79fc49610fe4ba20ade7d3cbafe30}{Exp}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01838\ }
+\DoxyCodeLine{01859\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_aafd911eab8af5c4ec79593d67f7823df}{Mod}}(\textcolor{keywordtype}{double}\ mod\_value)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01860\ }
+\DoxyCodeLine{01878\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a7183546c868b2cac8075f0434376dccb}{Sin}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01879\ }
+\DoxyCodeLine{01897\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a9f691219cdb0a10a8111db8573128666}{Cos}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01898\ }
+\DoxyCodeLine{01918\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a8148f97acf80f5e6aa685544ecc22be2}{Tan}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01919\ }
+\DoxyCodeLine{01939\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a0dfe79c9b87996847a2c898578c240ff}{Csc}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01940\ }
+\DoxyCodeLine{01960\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a85eaa3e12b1a044e82d5f5912460aee8}{Sec}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01961\ }
+\DoxyCodeLine{01981\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a9cff3aed7469fd72059da70444170b41}{Cot}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{01982\ }
+\DoxyCodeLine{02001\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_ae58831c074bbc7eec61f1ea6a1644d91}{Asin}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{02002\ }
+\DoxyCodeLine{02021\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a8639798951ac43fcf9edbb510b65dd5b}{Acos}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{02022\ }
+\DoxyCodeLine{02040\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_af9cb1919c5b966567b5d7d485b24dc56}{Atan}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{02041\ }
+\DoxyCodeLine{02061\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a7fe84551eed81225a551e784bd528f8c}{Acsc}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{02062\ }
+\DoxyCodeLine{02082\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_aeb8b24b1035217d354520b1aa16117e7}{Asec}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{02083\ }
+\DoxyCodeLine{02102\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a769bd806f3e8a44ccb621b548f617505}{Acot}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{02103\ }
+\DoxyCodeLine{02119\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a2cbc29f90925cf18d54d62d9cc6ebbe3}{Sinh}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{02120\ }
+\DoxyCodeLine{02136\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a65a86d44bf78501dbdcaa52ba72d7bd3}{Cosh}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{02137\ }
+\DoxyCodeLine{02154\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_aee8ad1fde49129b199ad87b4dd85c07f}{Tanh}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{02155\ }
+\DoxyCodeLine{02171\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a2ddab39bf92ee11ab318b3d3374b391c}{Csch}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{02172\ }
+\DoxyCodeLine{02188\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a03d0593a8715bad32098cbda433451f1}{Sech}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{02189\ }
+\DoxyCodeLine{02205\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a4b4030aa4413ca8c4714526965986657}{Coth}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{02206\ }
+\DoxyCodeLine{02222\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a7d4ff3c3c4775b55bd8fc94d9d3e4479}{Asinh}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{02223\ }
+\DoxyCodeLine{02240\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a626ba6c6dc620d5de32c6bc81a594381}{Acosh}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{02241\ }
+\DoxyCodeLine{02258\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_ad6e896aed6bc70bfe19fb1f9cd2d527d}{Atanh}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{02259\ }
+\DoxyCodeLine{02275\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_ada3b749b1a67fedb986ff69a05350c63}{Acsch}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{02276\ }
+\DoxyCodeLine{02292\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_a5144a947b733c6ca5a5dcc5430f8df29}{Asech}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{02293\ }
+\DoxyCodeLine{02310\ \ \ \ \ Tensor\ \mbox{\hyperlink{class_tensor_ad24f26852c9f77f4924bb7f921c470fd}{Acoth}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{02311\ }
+\DoxyCodeLine{02323\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_tensor_ae00c340a459f86d5053466a73ef210e4}{Rank}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{02324\ }
+\DoxyCodeLine{02335\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_tensor_ad7155b38d35344550fde1eeb7f0fbd61}{Volume}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{02336\ }
+\DoxyCodeLine{02349\ \ \ \ \ std::vector<int>\ \mbox{\hyperlink{class_tensor_adb8cd0e538a8410157ca2a17a5055f02}{Shape}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{02350\ }
+\DoxyCodeLine{02363\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_tensor_a767884250837a4894e6d8b592a9d3450}{IsEmpty}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{02364\ }
+\DoxyCodeLine{02378\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_tensor_a203a74ae4428ecadfd1efbebd85d753d}{IsScalar}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{02379\ }
+\DoxyCodeLine{02380\ \ \ \ \ \textcolor{keywordtype}{void}\ Clear();}
+\DoxyCodeLine{02381\ }
+\DoxyCodeLine{02409\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_tensor_a5e012653a230fcafd531ac6063e0067a}{Print}}(\textcolor{keywordtype}{int}\ depth\ =\ 0)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{02410\ }
+\DoxyCodeLine{02423\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{class_tensor_ad3b998f18ac3263bf5e02b88026a166f}{ToScalar}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{02424\ }
+\DoxyCodeLine{02439\ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{class_tensor_a577b089b89971b6ab7a1bfab790e4edc}{ToVector}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{02440\ }
+\DoxyCodeLine{02458\ \ \ \ \ std::vector<std::vector<double>>\ \mbox{\hyperlink{class_tensor_abd4b0bfabe2a7c378318d6132ec84936}{ToMatrix}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{02459\ \};}
+
+\end{DoxyCode}

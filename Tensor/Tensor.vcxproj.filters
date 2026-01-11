@@ -1,0 +1,528 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Activation">
+      <UniqueIdentifier>{71f28b4d-96a6-4a1d-a0fa-a37e4e4b527e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Activation">
+      <UniqueIdentifier>{0d9a96b1-07a0-44ca-af4b-7039167c24f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Activation\ScalarActivation">
+      <UniqueIdentifier>{4306b285-b6f9-470c-a305-7eb9ddddf993}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Activation\TensorActivation">
+      <UniqueIdentifier>{0153bcf1-e3aa-478b-aacf-6155ec84ce15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Activation\ScalarActivation">
+      <UniqueIdentifier>{6da2c8b9-24d7-4b2a-8daa-77f8afbf77ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Activation\TensorActivation">
+      <UniqueIdentifier>{8c1cc237-af3e-4aab-a6d4-54000b3cf62e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tensor">
+      <UniqueIdentifier>{26f17d52-7278-42e7-8cfe-a2974d52d018}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tensor">
+      <UniqueIdentifier>{df9e4da2-771b-48bb-a7f2-bce4e10276f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utility">
+      <UniqueIdentifier>{fa86d630-ced8-4677-8f66-218f32a5c10b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utility">
+      <UniqueIdentifier>{bb9cd688-bbe1-4ef2-abd7-e2d6693f5dd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Math">
+      <UniqueIdentifier>{bfbf2f78-5286-459a-aef4-5305d1be0266}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Math\Elementary">
+      <UniqueIdentifier>{3968456f-4be9-41da-b093-c02536514d61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Math\Trigonometric">
+      <UniqueIdentifier>{0f4b5e17-307c-4d80-be8f-b775f76c6fb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Math\Hyperbolic">
+      <UniqueIdentifier>{f19c43e2-45f2-4f91-9de7-61fe4b343df0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Math">
+      <UniqueIdentifier>{4f8ef335-70ac-4841-aa7b-c7372cb1cc1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Math\Elementary">
+      <UniqueIdentifier>{b5425519-c9ca-4aa1-9858-fa0890cb6bf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Math\Hyperbolic">
+      <UniqueIdentifier>{dcd459ea-c4b2-47c2-9a42-de26658ce246}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Math\Trigonometric">
+      <UniqueIdentifier>{095d0b69-8bef-4ddc-ad6e-ac25c88feaec}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BaseActivation.h">
+      <Filter>Header Files\Activation</Filter>
+    </ClInclude>
+    <ClInclude Include="Activation.h">
+      <Filter>Header Files\Activation</Filter>
+    </ClInclude>
+    <ClInclude Include="ArcTan.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="BinaryStep.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="ELU.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="Exponential.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="Gaussian.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="GELU.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="HardShrink.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="LeakyReLU.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="Linear.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="PReLU.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="ReLU.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="ScalarActivation.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="_Tanh.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="Sigmoid.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="SoftShrink.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="TensorActivation.h">
+      <Filter>Header Files\Activation\TensorActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="Softmax.h">
+      <Filter>Header Files\Activation\TensorActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="LogSoftmax.h">
+      <Filter>Header Files\Activation\TensorActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="Tensor.h">
+      <Filter>Header Files\Tensor</Filter>
+    </ClInclude>
+    <ClInclude Include="TensorSlice.h">
+      <Filter>Header Files\Tensor</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseOperation.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Abs.h">
+      <Filter>Header Files\Math\Elementary</Filter>
+    </ClInclude>
+    <ClInclude Include="Exp.h">
+      <Filter>Header Files\Math\Elementary</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>Header Files\Math\Elementary</Filter>
+    </ClInclude>
+    <ClInclude Include="Clip.h">
+      <Filter>Header Files\Math\Elementary</Filter>
+    </ClInclude>
+    <ClInclude Include="Power.h">
+      <Filter>Header Files\Math\Elementary</Filter>
+    </ClInclude>
+    <ClInclude Include="Floor.h">
+      <Filter>Header Files\Math\Elementary</Filter>
+    </ClInclude>
+    <ClInclude Include="Ceil.h">
+      <Filter>Header Files\Math\Elementary</Filter>
+    </ClInclude>
+    <ClInclude Include="Sqrt.h">
+      <Filter>Header Files\Math\Elementary</Filter>
+    </ClInclude>
+    <ClInclude Include="Round.h">
+      <Filter>Header Files\Math\Elementary</Filter>
+    </ClInclude>
+    <ClInclude Include="Mod.h">
+      <Filter>Header Files\Math\Elementary</Filter>
+    </ClInclude>
+    <ClInclude Include="Sin.h">
+      <Filter>Header Files\Math\Trigonometric</Filter>
+    </ClInclude>
+    <ClInclude Include="Cos.h">
+      <Filter>Header Files\Math\Trigonometric</Filter>
+    </ClInclude>
+    <ClInclude Include="Tan.h">
+      <Filter>Header Files\Math\Trigonometric</Filter>
+    </ClInclude>
+    <ClInclude Include="Csc.h">
+      <Filter>Header Files\Math\Trigonometric</Filter>
+    </ClInclude>
+    <ClInclude Include="Sec.h">
+      <Filter>Header Files\Math\Trigonometric</Filter>
+    </ClInclude>
+    <ClInclude Include="Cot.h">
+      <Filter>Header Files\Math\Trigonometric</Filter>
+    </ClInclude>
+    <ClInclude Include="Acos.h">
+      <Filter>Header Files\Math\Trigonometric</Filter>
+    </ClInclude>
+    <ClInclude Include="Acot.h">
+      <Filter>Header Files\Math\Trigonometric</Filter>
+    </ClInclude>
+    <ClInclude Include="Acsc.h">
+      <Filter>Header Files\Math\Trigonometric</Filter>
+    </ClInclude>
+    <ClInclude Include="Asec.h">
+      <Filter>Header Files\Math\Trigonometric</Filter>
+    </ClInclude>
+    <ClInclude Include="Asin.h">
+      <Filter>Header Files\Math\Trigonometric</Filter>
+    </ClInclude>
+    <ClInclude Include="Atan.h">
+      <Filter>Header Files\Math\Trigonometric</Filter>
+    </ClInclude>
+    <ClInclude Include="Tanh.h">
+      <Filter>Header Files\Math\Hyperbolic</Filter>
+    </ClInclude>
+    <ClInclude Include="Cosh.h">
+      <Filter>Header Files\Math\Hyperbolic</Filter>
+    </ClInclude>
+    <ClInclude Include="Coth.h">
+      <Filter>Header Files\Math\Hyperbolic</Filter>
+    </ClInclude>
+    <ClInclude Include="Csch.h">
+      <Filter>Header Files\Math\Hyperbolic</Filter>
+    </ClInclude>
+    <ClInclude Include="Sech.h">
+      <Filter>Header Files\Math\Hyperbolic</Filter>
+    </ClInclude>
+    <ClInclude Include="Sinh.h">
+      <Filter>Header Files\Math\Hyperbolic</Filter>
+    </ClInclude>
+    <ClInclude Include="Acosh.h">
+      <Filter>Header Files\Math\Hyperbolic</Filter>
+    </ClInclude>
+    <ClInclude Include="Acoth.h">
+      <Filter>Header Files\Math\Hyperbolic</Filter>
+    </ClInclude>
+    <ClInclude Include="Acsch.h">
+      <Filter>Header Files\Math\Hyperbolic</Filter>
+    </ClInclude>
+    <ClInclude Include="Asech.h">
+      <Filter>Header Files\Math\Hyperbolic</Filter>
+    </ClInclude>
+    <ClInclude Include="Asinh.h">
+      <Filter>Header Files\Math\Hyperbolic</Filter>
+    </ClInclude>
+    <ClInclude Include="Atanh.h">
+      <Filter>Header Files\Math\Hyperbolic</Filter>
+    </ClInclude>
+    <ClInclude Include="HardSigmoid.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="HardSwish.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="HardTanh.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="Swish.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="ReLU6.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="SELU.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="Mish.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="Softplus.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="Softsign.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="SparsePlus.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="SquarePlus.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="TanhShrink.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="LogSigmoid.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="Sparsemax.h">
+      <Filter>Header Files\Activation\TensorActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="Initializer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Activation.cpp">
+      <Filter>Source Files\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseActivation.cpp">
+      <Filter>Source Files\Activation</Filter>
+    </ClCompile>
+    <ClCompile Include="ArcTan.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="BinaryStep.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="ELU.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="Exponential.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="Gaussian.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="GELU.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="HardShrink.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="LeakyReLU.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="Linear.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="PReLU.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="ReLU.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="_Tanh.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="ScalarActivation.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="SoftShrink.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="Sigmoid.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="LogSoftmax.cpp">
+      <Filter>Source Files\Activation\TensorActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="Softmax.cpp">
+      <Filter>Source Files\Activation\TensorActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="TensorActivation.cpp">
+      <Filter>Source Files\Activation\TensorActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="Tensor.cpp">
+      <Filter>Source Files\Tensor</Filter>
+    </ClCompile>
+    <ClCompile Include="TensorSlice.cpp">
+      <Filter>Source Files\Tensor</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseOperation.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Abs.cpp">
+      <Filter>Source Files\Math\Elementary</Filter>
+    </ClCompile>
+    <ClCompile Include="Exp.cpp">
+      <Filter>Source Files\Math\Elementary</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>Source Files\Math\Elementary</Filter>
+    </ClCompile>
+    <ClCompile Include="Clip.cpp">
+      <Filter>Source Files\Math\Elementary</Filter>
+    </ClCompile>
+    <ClCompile Include="Power.cpp">
+      <Filter>Source Files\Math\Elementary</Filter>
+    </ClCompile>
+    <ClCompile Include="Floor.cpp">
+      <Filter>Source Files\Math\Elementary</Filter>
+    </ClCompile>
+    <ClCompile Include="Ceil.cpp">
+      <Filter>Source Files\Math\Elementary</Filter>
+    </ClCompile>
+    <ClCompile Include="Sqrt.cpp">
+      <Filter>Source Files\Math\Elementary</Filter>
+    </ClCompile>
+    <ClCompile Include="Round.cpp">
+      <Filter>Source Files\Math\Elementary</Filter>
+    </ClCompile>
+    <ClCompile Include="Mod.cpp">
+      <Filter>Source Files\Math\Elementary</Filter>
+    </ClCompile>
+    <ClCompile Include="Sin.cpp">
+      <Filter>Source Files\Math\Trigonometric</Filter>
+    </ClCompile>
+    <ClCompile Include="Cos.cpp">
+      <Filter>Source Files\Math\Trigonometric</Filter>
+    </ClCompile>
+    <ClCompile Include="Tan.cpp">
+      <Filter>Source Files\Math\Trigonometric</Filter>
+    </ClCompile>
+    <ClCompile Include="Csc.cpp">
+      <Filter>Source Files\Math\Trigonometric</Filter>
+    </ClCompile>
+    <ClCompile Include="Sec.cpp">
+      <Filter>Source Files\Math\Trigonometric</Filter>
+    </ClCompile>
+    <ClCompile Include="Cot.cpp">
+      <Filter>Source Files\Math\Trigonometric</Filter>
+    </ClCompile>
+    <ClCompile Include="Asin.cpp">
+      <Filter>Source Files\Math\Trigonometric</Filter>
+    </ClCompile>
+    <ClCompile Include="Acos.cpp">
+      <Filter>Source Files\Math\Trigonometric</Filter>
+    </ClCompile>
+    <ClCompile Include="Atan.cpp">
+      <Filter>Source Files\Math\Trigonometric</Filter>
+    </ClCompile>
+    <ClCompile Include="Acsc.cpp">
+      <Filter>Source Files\Math\Trigonometric</Filter>
+    </ClCompile>
+    <ClCompile Include="Asec.cpp">
+      <Filter>Source Files\Math\Trigonometric</Filter>
+    </ClCompile>
+    <ClCompile Include="Acot.cpp">
+      <Filter>Source Files\Math\Trigonometric</Filter>
+    </ClCompile>
+    <ClCompile Include="Tanh.cpp">
+      <Filter>Source Files\Math\Hyperbolic</Filter>
+    </ClCompile>
+    <ClCompile Include="Cosh.cpp">
+      <Filter>Source Files\Math\Hyperbolic</Filter>
+    </ClCompile>
+    <ClCompile Include="Sinh.cpp">
+      <Filter>Source Files\Math\Hyperbolic</Filter>
+    </ClCompile>
+    <ClCompile Include="Csch.cpp">
+      <Filter>Source Files\Math\Hyperbolic</Filter>
+    </ClCompile>
+    <ClCompile Include="Sech.cpp">
+      <Filter>Source Files\Math\Hyperbolic</Filter>
+    </ClCompile>
+    <ClCompile Include="Coth.cpp">
+      <Filter>Source Files\Math\Hyperbolic</Filter>
+    </ClCompile>
+    <ClCompile Include="Asinh.cpp">
+      <Filter>Source Files\Math\Hyperbolic</Filter>
+    </ClCompile>
+    <ClCompile Include="Acosh.cpp">
+      <Filter>Source Files\Math\Hyperbolic</Filter>
+    </ClCompile>
+    <ClCompile Include="Atanh.cpp">
+      <Filter>Source Files\Math\Hyperbolic</Filter>
+    </ClCompile>
+    <ClCompile Include="Acsch.cpp">
+      <Filter>Source Files\Math\Hyperbolic</Filter>
+    </ClCompile>
+    <ClCompile Include="Asech.cpp">
+      <Filter>Source Files\Math\Hyperbolic</Filter>
+    </ClCompile>
+    <ClCompile Include="Acoth.cpp">
+      <Filter>Source Files\Math\Hyperbolic</Filter>
+    </ClCompile>
+    <ClCompile Include="Math.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="HardSigmoid.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="HardSwish.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="HardTanh.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="Swish.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="ReLU6.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="SELU.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="Mish.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="Softplus.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="Softsign.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="SparsePlus.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="SquarePlus.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="TanhShrink.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="LogSigmoid.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="Sparsemax.cpp">
+      <Filter>Source Files\Activation\TensorActivation</Filter>
+    </ClCompile>
+    <ClCompile Include="Initializer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
