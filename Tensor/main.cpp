@@ -14,9 +14,9 @@ int main()
 {
     try
     {
-        LinAlg::Matrix A({ {2, 1, 5, 0}, {-2, 1, 4, -1}, {3, 0, 1, -1} });
+        LinAlg::Matrix A({ {2, -1, -2}, {-4, 6, 3}, {-4, -2, 8} });
         
-        LinAlg::QRResult r = A.QRDecomposition();
+        LinAlg::QRResult r = A.HQRDecomposition();
 
         cout << "===== QR RESULT =====\n";
         cout << "Matrix-P:\n";
@@ -31,13 +31,3 @@ int main()
 
     return 0;
 }
-
-//==== = QR RESULT ==== =
-//Matrix - P:
-//0.707107 0.408248 - 0.57735
-//0.707107 - 0.408248 0.57735
-//0 0.816497 0.57735
-//Matrix - L :
-//1.41421 0.707107 0.707107
-//0 1.22474 0.408248
-//0 0 1.1547

@@ -316,6 +316,9 @@ namespace Utils
     template<Numeric T, Numeric U, Numeric V>
     std::vector<T> ScaleNShift(const std::vector<T>& nums, U scale, V shift);
 
+    template<Numeric T>
+    double Norm(const std::vector<T>& nums);
+
     /**
      * @brief Checks if a 2D matrix has consistent row lengths (is rectangular).
      *
@@ -909,6 +912,23 @@ std::vector<T> Utils::ScaleNShift(const std::vector<T>& nums, U scale, V shift)
     }
 
     return result;
+}
+
+
+// ========================================
+// Vector L1 Norm Function
+// ========================================
+template<Numeric T>
+double Utils::Norm(const std::vector<T>& nums)
+{
+    double norm = 0.0;
+    for (const auto& value : nums)
+    {
+        norm += (value * value);
+    }
+
+    norm = std::sqrt(norm);
+    return norm;
 }
 
 

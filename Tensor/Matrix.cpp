@@ -19,6 +19,20 @@ bool LinAlg::Matrix::IsFullRowRank() const
 	return this->Rank() == this->shape.first;
 }
 
+void LinAlg::Matrix::ClearNoise()
+{
+	for (auto& row : this->data)
+	{
+		for (double& value : row)
+		{
+			if (std::abs(value) < LinAlg::Matrix::TOLERANCE)
+			{
+				value = 0.0;
+			}
+		}
+	}
+}
+
 // ========================================
 // Matrix Constructor(s)
 // ========================================
@@ -1963,7 +1977,7 @@ LinAlg::LUResult LinAlg::Matrix::LUDecomposition() const
 		P.data[permutation[i]][i] = 1.0;
 	}
 
-	return LinAlg::LUResult{ L, U, P };
+	return LinAlg::LUResult(L, U, P);
 }
 
 LinAlg::LDUResult LinAlg::Matrix::LDUDecomposition() const
@@ -2003,7 +2017,7 @@ LinAlg::LDUResult LinAlg::Matrix::LDUDecomposition() const
 	return LinAlg::LDUResult(result.L, D, result.U, result.P);
 }
 
-LinAlg::QRResult LinAlg::Matrix::QRDecomposition(const bool& _modified_gs) const
+LinAlg::QRResult LinAlg::Matrix::GSQRDecomposition() const
 {
 	if (this->IsEmpty())
 	{
@@ -2013,54 +2027,133 @@ LinAlg::QRResult LinAlg::Matrix::QRDecomposition(const bool& _modified_gs) const
 	int rows = this->shape.first;
 	int columns = this->shape.second;
 
-	// donot throw error here.
-
-	if (_modified_gs)
+	if (rows < columns)
 	{
-		LinAlg::Matrix Q = *this;
-		LinAlg::Matrix R = LinAlg::Matrix({ columns, columns }, 0.0);
+		throw std::runtime_error(
+			"[Matrix] Gram-Schmidt QR Decomposition failed: only supports m ? n (tall or square matrices). "
+			"For wide matrices (m < n), use HTQRDecomposition() instead. "
+			"Current shape: (" + std::to_string(rows) + ", " + std::to_string(columns) + ")"
+		);
+	}
 
-		for (int i = 0; i < columns; i++)
+	LinAlg::Matrix Q = *this;
+	LinAlg::Matrix R = LinAlg::Matrix({ columns, columns }, 0.0);
+
+	for (int i = 0; i < columns; i++)
+	{
+		for (int j = 0; j < i; j++)
 		{
-			for (int j = 0; j < i; j++)
-			{
-				R.data[j][i] = 0.0;
-
-				for (int k = 0; k < rows; k++)
-				{
-					R.data[j][i] += (Q.data[k][i] * Q.data[k][j]);
-				}
-
-				for (int k = 0; k < rows; k++)
-				{
-					Q.data[k][i] -= (R.data[j][i] * Q.data[k][j]);
-				}
-			}
-
-			double squared_norm = 0.0;
+			R.data[j][i] = 0.0;
 
 			for (int k = 0; k < rows; k++)
 			{
-				squared_norm += (Q.data[k][i] * Q.data[k][i]);
-			}
-
-			R.data[i][i] = std::sqrt(squared_norm);
-
-			if (R.data[i][i] < LinAlg::Matrix::TOLERANCE)
-			{
-				throw std::runtime_error("[Matrix] QR Decomposition failed: linearly dependent columns at column " + std::to_string(i));
+				R.data[j][i] += (Q.data[k][i] * Q.data[k][j]);
 			}
 
 			for (int k = 0; k < rows; k++)
 			{
-				Q.data[k][i] /= R.data[i][i];
+				Q.data[k][i] -= (R.data[j][i] * Q.data[k][j]);
 			}
 		}
 
-		return LinAlg::QRResult(Q, R);
+		double squared_norm = 0.0;
+
+		for (int k = 0; k < rows; k++)
+		{
+			squared_norm += (Q.data[k][i] * Q.data[k][i]);
+		}
+
+		R.data[i][i] = std::sqrt(squared_norm);
+
+		if (R.data[i][i] < LinAlg::Matrix::TOLERANCE)
+		{
+			throw std::runtime_error(
+				"[Matrix] Gram-Schmidt QR Decomposition failed: linearly dependent columns at column " +
+				std::to_string(i)
+			);
+		}
+
+		if (R.data[i][i] < LinAlg::Matrix::TOLERANCE)
+		{
+			throw std::runtime_error("[Matrix] QR Decomposition failed: linearly dependent columns at column " + std::to_string(i));
+		}
+
+		for (int k = 0; k < rows; k++)
+		{
+			Q.data[k][i] /= R.data[i][i];
+		}
 	}
-	// will implement household later.
-	return LinAlg::QRResult();
+
+	return LinAlg::QRResult(Q, R);
+}
+
+LinAlg::QRResult LinAlg::Matrix::HQRDecomposition() const
+{
+	if (this->IsEmpty())
+	{
+		throw std::runtime_error("[Matrix] Householder QR Decomposition failed: empty matrix.");
+	}
+
+	int rows = this->shape.first;
+	int columns = this->shape.second;
+
+	int k = std::min(rows, columns);
+
+	LinAlg::Matrix Q = LinAlg::Matrix::Identity(rows);
+	LinAlg::Matrix R = *this;
+
+	for (int i = 0; i < k; i++)
+	{
+		int vsize = rows - i;
+		std::vector<double> x(vsize);
+
+		for (int j = i; j < rows; j++)
+		{
+			x[j - i] = R.data[j][i];
+		}
+
+		double norm_x = Utils::Norm(x);
+		if (std::abs(norm_x) < LinAlg::Matrix::TOLERANCE)
+		{
+			continue;
+		}
+
+		x[0] += (x[0] >= 0) ? norm_x : -norm_x;
+
+		norm_x = Utils::Norm(x);
+		if (std::abs(norm_x) < LinAlg::Matrix::TOLERANCE)
+		{
+			continue;
+		}
+
+		for (double& value : x)
+		{
+			value /= norm_x;
+		}
+
+		LinAlg::Matrix v_col({ vsize, 1 }, x);
+		LinAlg::Matrix v_row = v_col.Transpose();
+		LinAlg::Matrix vvt = v_col.DotProduct(v_row);
+		LinAlg::Matrix h_sub = LinAlg::Matrix::Identity(vsize) - (vvt * 2);
+
+		LinAlg::Matrix Qi = LinAlg::Matrix::Identity(rows);
+
+		for (int r = 0; r < vsize; r++)
+		{
+			for (int c = 0; c < vsize; c++)
+			{
+				Qi.data[r + i][c + i] = h_sub.data[r][c];
+			}
+		}
+
+		Q = Q.DotProduct(Qi);
+		R = Qi.DotProduct(R);
+	}
+
+	Q.ClearNoise();
+	R.ClearNoise();
+
+	return LinAlg::QRResult(Q, R);
 }
 
 LinAlg::SVDResult LinAlg::Matrix::SVDDecomposition() const

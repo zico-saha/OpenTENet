@@ -39,6 +39,8 @@ namespace LinAlg
         bool IsFullColumnRank() const;
         bool IsFullRowRank() const;
 
+        void ClearNoise();
+
     public:
         // ========== Constructors ==========
         Matrix() {}
@@ -143,7 +145,8 @@ namespace LinAlg
         // ========== Decompositions ==========
         LinAlg::LUResult LUDecomposition() const;
         LinAlg::LDUResult LDUDecomposition() const;
-        LinAlg::QRResult QRDecomposition(const bool& _modified_gs = true) const;
+        LinAlg::QRResult GSQRDecomposition() const;
+        LinAlg::QRResult HQRDecomposition() const;
         LinAlg::SVDResult SVDDecomposition() const;
         LinAlg::CholeskyResult CholeskyDecomposition() const;
         LinAlg::EigenResult EigenDecomposition() const;
