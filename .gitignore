@@ -367,5 +367,6 @@ FodyWeavers.xsd
 # =========================
 
 # Doxygen output
-docs/html/
-docs/latex/
+Tensor/docs
+Tensor/docs/html/
+Tensor/docs/latex/

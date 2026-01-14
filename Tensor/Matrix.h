@@ -8,12 +8,12 @@
 #include <limits>
 #include <numbers>
 #include <numeric>
+#include <optional>
 #include <random>
 #include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
-#include <optional>
 
 namespace LinAlg
 {
@@ -29,7 +29,7 @@ namespace LinAlg
     {
     private:
         std::vector<std::vector<double>> data;
-        std::pair<int, int> shape;
+        std::pair<int, int> shape = { 0, 0 };
         int volume = 0;
 
         // ========== Constants ==========
@@ -134,6 +134,7 @@ namespace LinAlg
         double Determinant() const;
         double Trace() const;
         int Rank() const;
+        std::vector<double> Diag(const bool& _sign = false) const;
 
         // ========== Norms ==========
         double FrobeniusNorm() const;
@@ -146,7 +147,7 @@ namespace LinAlg
         LinAlg::LUResult LUDecomposition() const;
         LinAlg::LDUResult LDUDecomposition() const;
         LinAlg::QRResult GSQRDecomposition() const;
-        LinAlg::QRResult HQRDecomposition() const;
+        LinAlg::QRResult HQRDecomposition(const bool& _full = true) const;
         LinAlg::SVDResult SVDDecomposition() const;
         LinAlg::CholeskyResult CholeskyDecomposition() const;
         LinAlg::EigenResult EigenDecomposition() const;
@@ -180,6 +181,12 @@ namespace LinAlg
         std::vector<double> GetColumn(const int& _column_index) const;
         Matrix GetRows(const std::vector<int>& _row_indices) const;
         Matrix GetColumns(const std::vector<int>& _column_indices) const;
+        std::vector<double> GetFlatData() const;
+
+        void PopRow(const int& _index = -1);
+        void PopColumn(const int& _index = -1);
+        void PopRows(const std::vector<int>& _indices);
+        void PopColumns(const std::vector<int>& _indices);
 
         void Print() const;
     };

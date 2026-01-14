@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Matrix.h"
 #include "Tensor.h"
 #include "Utils.h"
 
@@ -59,5 +60,5 @@ public:
 
 	Tensor LecunUniform(const int& _fan_in) const;
 
-	Tensor Orthogonal(const double& gain = 1.0) const;
+	Tensor Orthogonal(const std::pair<int, int>& _axes = {-1, -2}, const double& _gain = 1.0) const;
 };

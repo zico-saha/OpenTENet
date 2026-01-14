@@ -1075,6 +1075,8 @@ LinAlg::Matrix LinAlg::Matrix::DotProduct(const std::vector<std::vector<double>>
 			{
 				result[i][j] += (this->data[i][k] * _matrix[k][j]);
 			}
+
+			result[i][j] = (std::abs(result[i][j]) < LinAlg::Matrix::TOLERANCE) ? 0.0 : result[i][j];
 		}
 	}
 
@@ -1403,6 +1405,33 @@ int LinAlg::Matrix::Rank() const
 {
 	LinAlg::EliminationResult row_echelon_form = this->GaussianElimination();
 	return row_echelon_form.rank;
+}
+
+std::vector<double> LinAlg::Matrix::Diag(const bool& _sign) const
+{
+	if (this->IsEmpty())
+	{
+		throw std::runtime_error("[Matrix] Get Diagonal failed: empty Matrix.");
+	}
+
+	if (!this->IsSquare())
+	{
+		throw std::runtime_error("[Matrix] Get Diagonal failed: diagonal is only defined for square Matrix.");
+	}
+
+	std::vector<double> diagonal(this->shape.first);
+
+	for (int i = 0; i < this->shape.first; i++)
+	{
+		diagonal[i] = this->data[i][i];
+
+		if (_sign)
+		{
+			diagonal[i] = (diagonal[i] < 0.0) ? -1.0 : 1.0;
+		}
+	}
+
+	return diagonal;
 }
 
 // ========================================
@@ -1845,18 +1874,128 @@ LinAlg::Matrix LinAlg::Matrix::GetColumns(const std::vector<int>& _column_indice
 	return LinAlg::Matrix(sub_matrix);
 }
 
-// ========================================
-// Matrix Print Method
-// ========================================
-void LinAlg::Matrix::Print() const
+std::vector<double> LinAlg::Matrix::GetFlatData() const
 {
-	for (const auto& row : this->data)
+	std::vector<double> flat_data;
+
+	if (this->IsEmpty())
 	{
-		for (const double& value : row)
-		{
-			std::cout << value << " ";
-		}
-		std::cout << std::endl;
+		return flat_data;
+	}
+
+	flat_data.reserve(this->volume);
+
+	for (int i = 0; i < this->shape.first; i++)
+	{
+		flat_data.insert(flat_data.end(), this->data[i].begin(), this->data[i].end());
+	}
+
+	return flat_data;
+}
+
+// ========================================
+// Matrix Row(s)/Column(s) Removal Method(s)
+// ========================================
+void LinAlg::Matrix::PopRow(const int& _index)
+{
+	if (this->IsEmpty())
+	{
+		throw std::runtime_error("[Matrix] Pop Row failed: empty Matrix.");
+	}
+
+	int index = (_index < 0) ? (_index + this->shape.first) : _index;
+
+	if (index < 0 || index >= this->shape.first)
+	{
+		throw std::out_of_range("[Matrix] Pop Row failed: index: " + std::to_string(index) + " out of bounds: [0, rows).");
+	}
+
+	this->data.erase(this->data.begin() + index);
+
+	if (this->data.size() == 0 || this->data[0].size() == 0)
+	{
+		this->data.clear();
+		this->shape = { 0, 0 };
+		this->volume = 0;
+	}
+	else
+	{
+		this->shape = { this->data.size(), this->data[0].size() };
+		this->volume = this->shape.first * this->shape.second;
+	}
+}
+
+void LinAlg::Matrix::PopColumn(const int& _index)
+{
+	if (this->IsEmpty())
+	{
+		throw std::runtime_error("[Matrix] Pop Row failed: empty Matrix.");
+	}
+
+	int index = (_index < 0) ? (_index + this->shape.second) : _index;
+
+	if (index < 0 || index >= this->shape.second)
+	{
+		throw std::out_of_range("[Matrix] Pop Column failed: index: " + std::to_string(index) + " out of bounds: [0, columns).");
+	}
+
+	for (int i = 0; i < this->shape.first; i++)
+	{
+		this->data[i].erase(this->data[i].begin() + index);
+	}
+
+	if (this->data.size() == 0 || this->data[0].size() == 0)
+	{
+		this->data.clear();
+		this->shape = { 0, 0 };
+		this->volume = 0;
+	}
+	else
+	{
+		this->shape = { this->data.size(), this->data[0].size() };
+		this->volume = this->shape.first * this->shape.second;
+	}
+}
+
+void LinAlg::Matrix::PopRows(const std::vector<int>& _indices)
+{
+	if (!Utils::IsBounded(_indices, this->shape.first, -1, true))
+	{
+		throw std::out_of_range("[Matrix] Pop Rows failed: index(s) out of bounds: [0, rows).");
+	}
+
+	if (!Utils::IsAllUnique(_indices))
+	{
+		throw std::invalid_argument("[Matrix] Pop Rows failed: index values must be unique.");
+	}
+
+	std::vector<int> desc_indices = _indices;
+	std::sort(desc_indices.begin(), desc_indices.end(), std::greater<int>());
+
+	for (const int& index : desc_indices)
+	{
+		this->PopRow(index);
+	}
+}
+
+void LinAlg::Matrix::PopColumns(const std::vector<int>& _indices)
+{
+	if (!Utils::IsBounded(_indices, this->shape.second, -1, true))
+	{
+		throw std::out_of_range("[Matrix] Pop Columns failed: index(s) out of bounds: [0, columns).");
+	}
+
+	if (!Utils::IsAllUnique(_indices))
+	{
+		throw std::invalid_argument("[Matrix] Pop Columns failed: index values must be unique.");
+	}
+
+	std::vector<int> desc_indices = _indices;
+	std::sort(desc_indices.begin(), desc_indices.end(), std::greater<int>());
+
+	for (const int& index : desc_indices)
+	{
+		this->PopColumn(index);
 	}
 }
 
@@ -2087,7 +2226,7 @@ LinAlg::QRResult LinAlg::Matrix::GSQRDecomposition() const
 	return LinAlg::QRResult(Q, R);
 }
 
-LinAlg::QRResult LinAlg::Matrix::HQRDecomposition() const
+LinAlg::QRResult LinAlg::Matrix::HQRDecomposition(const bool& _full) const
 {
 	if (this->IsEmpty())
 	{
@@ -2150,6 +2289,17 @@ LinAlg::QRResult LinAlg::Matrix::HQRDecomposition() const
 		R = Qi.DotProduct(R);
 	}
 
+	if (!_full && rows > columns)
+	{
+		int diff = rows - k;
+		
+		std::vector<int> indices(diff);
+		std::iota(indices.begin(), indices.end(), k);
+
+		Q.PopColumns(indices);
+		R.PopRows(indices);
+	}
+
 	Q.ClearNoise();
 	R.ClearNoise();
 
@@ -2174,4 +2324,19 @@ LinAlg::EigenResult LinAlg::Matrix::EigenDecomposition() const
 LinAlg::EigenResult LinAlg::Matrix::SpectralDecomposition() const
 {
 	return LinAlg::EigenResult();
+}
+
+// ========================================
+// Matrix Print Method
+// ========================================
+void LinAlg::Matrix::Print() const
+{
+	for (const auto& row : this->data)
+	{
+		for (const double& value : row)
+		{
+			std::cout << value << " ";
+		}
+		std::cout << std::endl;
+	}
 }

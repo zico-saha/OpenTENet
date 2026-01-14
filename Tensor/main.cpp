@@ -14,15 +14,21 @@ int main()
 {
     try
     {
-        LinAlg::Matrix A({ {2, -1, -2}, {-4, 6, 3}, {-4, -2, 8} });
+        LinAlg::Matrix A({ {2, -1, -2, 5}, {-4, 6, 0, 3}, {-4, -2, 1, 8} });
         
-        LinAlg::QRResult r = A.HQRDecomposition();
+        LinAlg::QRResult r = A.HQRDecomposition(false);
 
-        cout << "===== QR RESULT =====\n";
+        cout << "===== Original Matrix =====\n";
+        A.Print();
+
+        cout << "\n===== QR RESULT =====\n";
         cout << "Matrix-P:\n";
         r.Q.Print();
         cout << "Matrix-L:\n";
         r.R.Print();
+
+        cout << "\n===== Reconstructed Matrix =====\n";
+        (r.Q.DotProduct(r.R)).Print();
     }
     catch (const std::exception& e)
     {
