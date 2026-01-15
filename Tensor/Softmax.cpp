@@ -1,4 +1,5 @@
 #include "Softmax.h"
+#include "Matrix.h"
 #include "Tensor.h"
 
 
@@ -54,9 +55,10 @@ Tensor Activation::Softmax::df(const Tensor& tensor) const
 
     Tensor jacobian = Tensor::MatMul(s1, s2);
 
-    Tensor identity = Tensor::IdentityMatrix(size).Broadcast(jacobian.Shape());
+    Tensor identity_matrix(LinAlg::Matrix::Identity(size));
+    Tensor identity_tensor = identity_matrix.Broadcast(jacobian.Shape());
 
-    jacobian = (s1 * identity) - jacobian;
+    jacobian = (s1 * identity_tensor) - jacobian;
 
     std::vector<int> permutation_2(jacobian.Rank());
     std::iota(permutation_2.begin(), permutation_2.end(), 0);

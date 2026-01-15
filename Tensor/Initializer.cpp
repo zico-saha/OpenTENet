@@ -85,14 +85,14 @@ Tensor Initializer::Identity(const std::pair<int, int>& _matrix_axes, const doub
         throw std::runtime_error("[Initializer] Identity Tensor Construct failed: identity axes must have equal size.");
     }
 
-    Tensor I = Tensor::IdentityMatrix(this->shape[axis_1]);
-    I *= _scale;
+    LinAlg::Matrix identity_matrix = LinAlg::Matrix::Identity(this->shape[axis_1], _scale);
+    Tensor identity_tensor(identity_matrix);
 
     std::vector<int> expanded_shape(this->rank, 1);
     expanded_shape[axis_1] = this->shape[axis_1];
     expanded_shape[axis_2] = this->shape[axis_2];
 
-    Tensor result = I.Reshape(expanded_shape).Broadcast(this->shape);
+    Tensor result = identity_tensor.Reshape(expanded_shape).Broadcast(this->shape);
 
     return result;
 }

@@ -1,4 +1,5 @@
 #include "LogSoftmax.h"
+#include "Matrix.h"
 #include "Tensor.h"
 
 
@@ -51,15 +52,15 @@ Tensor Activation::LogSoftmax::df(const Tensor& tensor) const
 
     result = result.Broadcast(broadcast_shape);
 
-    Tensor identity = Tensor::IdentityMatrix(size);
+    Tensor identity_matrix(LinAlg::Matrix::Identity(size));
 
     std::vector<int> shape(result.Rank(), 1);
     shape[actual_axis] = size;
     shape[actual_axis + 1] = size;
 
-    identity = identity.Reshape(shape);
+    identity_matrix = identity_matrix.Reshape(shape);
 
-    Tensor jacobian = identity - result;
+    Tensor jacobian = identity_matrix - result;
 
     return jacobian;
 }

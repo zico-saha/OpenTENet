@@ -219,6 +219,25 @@ Tensor::Tensor(const std::vector<int>& _shape, const std::vector<double>& _data)
 	this->end_point = this->volume;
 }
 
+Tensor::Tensor(const LinAlg::Matrix& _matrix)
+{
+	if (_matrix.IsEmpty())
+	{
+		return;
+	}
+
+	this->data = std::make_shared<std::vector<double>>(_matrix.GetFlatData());
+	
+	this->rank = 2;
+	this->volume = _matrix.Volume();
+
+	this->shape = { _matrix.Shape().first, _matrix.Shape().second };
+	this->strides = { this->shape[1], 1 };
+
+	this->start_point = 0;
+	this->end_point = this->volume;
+}
+
 Tensor::Tensor(const Tensor& _tensor)
 {
 	this->rank = _tensor.rank;
@@ -2177,30 +2196,4 @@ std::vector<std::vector<double>> Tensor::ToMatrix() const
 	}
 
 	return matrix;
-}
-
-// ========================================
-// Tensor Constructing Method(s)
-// ========================================
-Tensor Tensor::IdentityMatrix(const int& _rows)
-{
-	if (_rows <= 0)
-	{
-		throw std::invalid_argument("[Tensor] Identity Matrix Generate failed: matrix size cannot be <= 0.");
-	}
-
-	if (Utils::IsVolumeOverflow({ _rows, _rows }))
-	{
-		throw std::invalid_argument("[Tensor] Identity Matrix Generate failed: shape too large, potential overflow.");
-	}
-
-	int volume = (_rows * _rows);
-	std::vector<double> data(volume, 0.0);
-
-	for (size_t i = 0; i < volume; i += (_rows + 1))
-	{
-		data[i] = 1.0;
-	}
-
-	return Tensor({ _rows, _rows }, data);
 }

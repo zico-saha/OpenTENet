@@ -2,6 +2,7 @@
 
 #include "Activation.h"
 #include "Math.h"
+#include "Matrix.h"
 #include "TensorSlice.h"
 #include "Utils.h"
 
@@ -68,6 +69,8 @@ public:
 	Tensor(const std::vector<int>& _shape, const double& _value = 0);
 
 	Tensor(const std::vector<int>& _shape, const std::vector<double>& _data);
+
+	Tensor(const LinAlg::Matrix& _matrix);
 
 	Tensor(const Tensor& _tensor);
 
@@ -206,6 +209,4 @@ public:
 	std::vector<double> ToVector() const;
 
 	std::vector<std::vector<double>> ToMatrix() const;
-
-	static Tensor IdentityMatrix(const int& _rows);
 };
