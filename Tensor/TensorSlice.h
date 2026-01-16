@@ -146,8 +146,6 @@ public:
 
 	double Min() const;
 
-	Tensor MathOps(const Math::BaseOperation& _math_func) const;
-
 	Tensor Activate(const Activation::BaseActivation& _activation_func) const;
 
 	Tensor ActivateDerivative(const Activation::BaseActivation& _activation_func) const;

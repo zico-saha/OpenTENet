@@ -2017,14 +2017,6 @@ double Tensor::Min() const
 }
 
 // ========================================
-// Tensor General Mathematical Method(s)
-// ========================================
-Tensor Tensor::MathOps(const Math::BaseOperation& _math_func) const
-{
-	return _math_func.f(*this);
-}
-
-// ========================================
 // Tensor Activation Method(s)
 // ========================================
 Tensor Tensor::Activate(const Activation::BaseActivation& _activation_func) const

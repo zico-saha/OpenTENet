@@ -377,15 +377,6 @@ double TensorSlice::Min() const
 }
 
 // ========================================
-// Tensor General Mathematical Method(s)
-// ========================================
-Tensor TensorSlice::MathOps(const Math::BaseOperation& _math_func) const
-{
-    Tensor temp = this->_Tensor();
-    return _math_func.f(temp);
-}
-
-// ========================================
 // Pass-through Tensor Activation Method(s)
 // ========================================
 Tensor TensorSlice::Activate(const Activation::BaseActivation& _activation_func) const
