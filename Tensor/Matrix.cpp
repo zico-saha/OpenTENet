@@ -33,6 +33,21 @@ void LinAlg::Matrix::ClearNoise()
 	}
 }
 
+LinAlg::Matrix LinAlg::Matrix::Apply(const std::function<double(double)>& _func) const
+{
+	std::vector<std::vector<double>> result_data(this->shape.first, std::vector<double>(this->shape.second));
+
+	for (int i = 0; i < this->shape.first; i++)
+	{
+		for (int j = 0; j < this->shape.second; j++)
+		{
+			result_data[i][j] = _func(this->data[i][j]);
+		}
+	}
+
+	return LinAlg::Matrix(result_data);
+}
+
 // ========================================
 // Matrix Constructor(s)
 // ========================================

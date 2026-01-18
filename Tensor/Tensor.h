@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Activation.h"
-#include "Math.h"
 #include "Matrix.h"
 #include "TensorSlice.h"
 #include "Utils.h"
@@ -27,11 +26,13 @@
 #undef min
 #undef max
 
+class Math;
 class TensorSlice;
 
 class Tensor
 {
 	friend class TensorSlice;
+	friend class Math;
 
 private:
 	int rank = 0;
@@ -48,6 +49,7 @@ private:
 
 	int end_point = 0;
 
+	// ========== Constants ==========
 	static constexpr double EPSILON_SCALE = 1e6;
 
 public:
@@ -62,6 +64,8 @@ private:
 	Tensor GetSliceChain(const std::vector<int>& _indices) const;
 
 	void SetSliceChain(const std::vector<int>& _indices, const Tensor& _source);
+
+	Tensor Apply(const std::function<double(double)>& _func) const;
 
 public:
 	Tensor() {}

@@ -245,9 +245,6 @@
     <ClCompile Include="Utils.cpp">
       <Filter>Source Files\Utility</Filter>
     </ClCompile>
-    <ClCompile Include="Math.cpp">
-      <Filter>Source Files\Math</Filter>
-    </ClCompile>
     <ClCompile Include="HardSigmoid.cpp">
       <Filter>Source Files\Activation\ScalarActivation</Filter>
     </ClCompile>
@@ -296,5 +293,10 @@
     <ClCompile Include="Matrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Math.inl">
+      <Filter>Source Files\Math</Filter>
+    </None>
   </ItemGroup>
 </Project>

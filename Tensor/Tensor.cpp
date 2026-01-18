@@ -117,6 +117,24 @@ void Tensor::SetSliceChain(const std::vector<int>& _indices, const Tensor& _sour
 	this->SetSlice(_indices[0], temp);
 }
 
+Tensor Tensor::Apply(const std::function<double(double)>& _func) const
+{
+	if (!this->data)
+	{
+		throw std::runtime_error("[Tensor] Apply Operation failed: data is null.");
+	}
+
+	std::vector<double> result_data;
+	result_data.reserve(this->volume);
+
+	for (int i = this->start_point; i < this->end_point; i++)
+	{
+		result_data.push_back(_func((*this->data)[i]));
+	}
+
+	return Tensor(this->shape, result_data);
+}
+
 // ========================================
 // Tensor Constructors
 // ========================================

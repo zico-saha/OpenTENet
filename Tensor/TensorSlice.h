@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Activation.h"
-#include "Math.h"
 
 #include <vector>
 #include <string>

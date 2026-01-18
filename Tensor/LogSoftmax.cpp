@@ -1,4 +1,5 @@
 #include "LogSoftmax.h"
+#include "Math.h"
 #include "Matrix.h"
 #include "Tensor.h"
 
@@ -29,10 +30,10 @@ Tensor Activation::LogSoftmax::f(const Tensor& tensor) const
 
     Tensor max_vals = tensor.ReduceMax(actual_axis);
     Tensor shifted = tensor - max_vals.ExpandRank(actual_axis);
-    Tensor exp_vals = shifted.MathOps(Math::Exp());
+    Tensor exp_vals = Math::Exp(shifted);
     Tensor sum_exp = exp_vals.ReduceSum(actual_axis);
 
-    Tensor log_sum = sum_exp.MathOps(Math::Log());
+    Tensor log_sum = Math::Log(sum_exp);
 
     return (shifted - log_sum.ExpandRank(actual_axis));
 }
