@@ -93,9 +93,6 @@
     <ClInclude Include="ScalarActivation.h">
       <Filter>Header Files\Activation\ScalarActivation</Filter>
     </ClInclude>
-    <ClInclude Include="_Tanh.h">
-      <Filter>Header Files\Activation\ScalarActivation</Filter>
-    </ClInclude>
     <ClInclude Include="Sigmoid.h">
       <Filter>Header Files\Activation\ScalarActivation</Filter>
     </ClInclude>
@@ -171,6 +168,9 @@
     <ClInclude Include="Matrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Tanh.h">
+      <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -213,9 +213,6 @@
       <Filter>Source Files\Activation\ScalarActivation</Filter>
     </ClCompile>
     <ClCompile Include="ReLU.cpp">
-      <Filter>Source Files\Activation\ScalarActivation</Filter>
-    </ClCompile>
-    <ClCompile Include="_Tanh.cpp">
       <Filter>Source Files\Activation\ScalarActivation</Filter>
     </ClCompile>
     <ClCompile Include="ScalarActivation.cpp">
@@ -292,6 +289,9 @@
     </ClCompile>
     <ClCompile Include="Matrix.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tanh.cpp">
+      <Filter>Source Files\Activation\ScalarActivation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

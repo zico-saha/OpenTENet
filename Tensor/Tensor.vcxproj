@@ -160,8 +160,8 @@
     <ClInclude Include="SparsePlus.h" />
     <ClInclude Include="SquarePlus.h" />
     <ClInclude Include="Swish.h" />
+    <ClInclude Include="Tanh.h" />
     <ClInclude Include="TanhShrink.h" />
-    <ClInclude Include="_Tanh.h" />
     <ClInclude Include="Tensor.h" />
     <ClInclude Include="TensorActivation.h" />
     <ClInclude Include="Math.h" />
@@ -203,8 +203,8 @@
     <ClCompile Include="SparsePlus.cpp" />
     <ClCompile Include="SquarePlus.cpp" />
     <ClCompile Include="Swish.cpp" />
+    <ClCompile Include="Tanh.cpp" />
     <ClCompile Include="TanhShrink.cpp" />
-    <ClCompile Include="_Tanh.cpp" />
     <ClCompile Include="Tensor.cpp" />
     <ClCompile Include="TensorActivation.cpp" />
     <ClCompile Include="TensorSlice.cpp" />

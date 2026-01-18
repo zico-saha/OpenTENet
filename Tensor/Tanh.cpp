@@ -1,4 +1,4 @@
-#include "_Tanh.h"
+#include "Tanh.h"
 
 
 double Activation::Tanh::f(double x) const
