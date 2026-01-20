@@ -49,6 +49,12 @@
     <Filter Include="Source Files\Math">
       <UniqueIdentifier>{4f8ef335-70ac-4841-aa7b-c7372cb1cc1c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Initializer">
+      <UniqueIdentifier>{3fe6ecd7-6555-4f88-9d7a-f6ceb00041bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Initializer">
+      <UniqueIdentifier>{f7efcafe-17ab-4f2a-b193-7be350702ed2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseActivation.h">
@@ -162,14 +168,14 @@
     <ClInclude Include="Sparsemax.h">
       <Filter>Header Files\Activation\TensorActivation</Filter>
     </ClInclude>
-    <ClInclude Include="Initializer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Matrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Tanh.h">
       <Filter>Header Files\Activation\ScalarActivation</Filter>
+    </ClInclude>
+    <ClInclude Include="Initializer.h">
+      <Filter>Header Files\Initializer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -284,19 +290,22 @@
     <ClCompile Include="Sparsemax.cpp">
       <Filter>Source Files\Activation\TensorActivation</Filter>
     </ClCompile>
-    <ClCompile Include="Initializer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Matrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Tanh.cpp">
       <Filter>Source Files\Activation\ScalarActivation</Filter>
     </ClCompile>
+    <ClCompile Include="Initializer.cpp">
+      <Filter>Source Files\Initializer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Math.inl">
       <Filter>Source Files\Math</Filter>
+    </None>
+    <None Include="Utils.inl">
+      <Filter>Source Files\Utility</Filter>
     </None>
   </ItemGroup>
 </Project>

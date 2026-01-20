@@ -165,6 +165,8 @@ namespace LinAlg
 
         Matrix DotProduct(const Matrix& _matrix) const;
 
+        static Matrix DotProduct(const Matrix& _matrix_1, const Matrix& _matrix_2);
+
         Matrix Transpose() const;
 
         Matrix Inverse() const;

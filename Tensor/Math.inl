@@ -1,12 +1,3 @@
-#pragma once
-
-#include <cmath>
-#include <algorithm>
-#include <limits>
-#include <numbers>
-#include <stdexcept>
-
-
 // ========================================
 // Elementary Methods
 // ========================================

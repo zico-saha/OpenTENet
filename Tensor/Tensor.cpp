@@ -1474,13 +1474,13 @@ Tensor Tensor::MatMul(const Tensor& _tensor_1, const Tensor& _tensor_2)
 		std::vector<double> data_1(start_ptr_1, end_ptr_1);
 		std::vector<double> data_2(start_ptr_2, end_ptr_2);
 
-		auto matrix_1 = Utils::VectorToMatrix(data_1, { matrix_shape_1[0], matrix_shape_1[1] });
-		auto matrix_2 = Utils::VectorToMatrix(data_2, { matrix_shape_2[0], matrix_shape_2[1] });
+		LinAlg::Matrix matrix_1({ matrix_shape_1[0], matrix_shape_1[1] }, data_1);
+		LinAlg::Matrix matrix_2({ matrix_shape_2[0], matrix_shape_2[1] }, data_2);
 
-		auto result_matrix = Utils::StandardMatrixMultiply(matrix_1, matrix_2);
-		auto vec = Utils::MatrixToVector(result_matrix);
+		LinAlg::Matrix result_matrix = LinAlg::Matrix::DotProduct(matrix_1, matrix_2);
 
-		result_data.insert(result_data.end(), vec.begin(), vec.end());
+		std::vector<double> data_vec = result_matrix.GetFlatData();
+		result_data.insert(result_data.end(), data_vec.begin(), data_vec.end());
 	}
 
 	return Tensor(result_shape, result_data);

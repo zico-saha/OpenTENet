@@ -1103,6 +1103,11 @@ LinAlg::Matrix LinAlg::Matrix::DotProduct(const LinAlg::Matrix& _matrix) const
 	return this->DotProduct(_matrix.data);
 }
 
+LinAlg::Matrix LinAlg::Matrix::DotProduct(const LinAlg::Matrix& _matrix_1, const LinAlg::Matrix& _matrix_2)
+{
+	return _matrix_1.DotProduct(_matrix_2);
+}
+
 // ========================================
 // Matrix Trasnpose Method
 // ========================================
