@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Matrix.h"
+#include "LinAlg.h"
 #include "Tensor.h"
 #include "Utils.h"
 

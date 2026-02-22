@@ -1477,7 +1477,7 @@ Tensor Tensor::MatMul(const Tensor& _tensor_1, const Tensor& _tensor_2)
 		LinAlg::Matrix matrix_1({ matrix_shape_1[0], matrix_shape_1[1] }, data_1);
 		LinAlg::Matrix matrix_2({ matrix_shape_2[0], matrix_shape_2[1] }, data_2);
 
-		LinAlg::Matrix result_matrix = LinAlg::Matrix::DotProduct(matrix_1, matrix_2);
+		LinAlg::Matrix result_matrix = LinAlg::Matrix::MatMul(matrix_1, matrix_2);
 
 		std::vector<double> data_vec = result_matrix.GetFlatData();
 		result_data.insert(result_data.end(), data_vec.begin(), data_vec.end());

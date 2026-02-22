@@ -1,3 +1,5 @@
+#include "Utils.h"
+
 // ========================================
 // Validation Function(s)
 // ========================================
@@ -280,115 +282,152 @@ std::vector<T> Utils::Permute(const std::vector<T>& nums, const std::vector<int>
 // Signal Transformation Function(s)
 // ========================================
 template<Numeric T, Numeric U, Numeric V>
-std::vector<T> Utils::ScaleNShift(const std::vector<T>& nums, const std::vector<U>& scale, const std::vector<V>& shift)
+std::vector<T> Utils::ScaleNShift(const std::vector<T>& _nums, const std::vector<U>& _scale, const std::vector<V>& _shift)
 {
-    if (nums.size() != scale.size())
+    if (_nums.size() != _scale.size())
     {
-        throw std::invalid_argument("[Tensor-Utils] Scaling-Shifting failed: size mismatch between nums array and scale array.");
+        throw std::invalid_argument("[Utils] Scaling-Shifting failed: size mismatch between nums array and scale array.");
     }
 
-    if (nums.size() != shift.size())
+    if (_nums.size() != _shift.size())
     {
-        throw std::invalid_argument("[Tensor-Utils] Scaling-Shifting failed: size mismatch between nums array and shift array.");
+        throw std::invalid_argument("[Utils] Scaling-Shifting failed: size mismatch between nums array and shift array.");
     }
 
-    size_t n = nums.size();
+    size_t n = _nums.size();
     std::vector<T> result(n);
 
     for (size_t i = 0; i < n; i++)
     {
-        result[i] = static_cast<T>(nums[i] * static_cast<T>(scale[i]) + static_cast<T>(shift[i]));
+        result[i] = static_cast<T>(_nums[i] * static_cast<T>(_scale[i]) + static_cast<T>(_shift[i]));
     }
 
     return result;
 }
 
 template<Numeric T, Numeric U, Numeric V>
-std::vector<T> Utils::ScaleNShift(const std::vector<T>& nums, const std::vector<U>& scale, V shift)
+std::vector<T> Utils::ScaleNShift(const std::vector<T>& _nums, const std::vector<U>& _scale, V _shift)
 {
-    if (nums.size() != scale.size())
+    if (_nums.size() != _scale.size())
     {
-        throw std::invalid_argument("[Tensor-Utils] Scaling-Shifting failed: size mismatch between nums array and scale array.");
+        throw std::invalid_argument("[Utils] Scaling-Shifting failed: size mismatch between nums array and scale array.");
     }
 
-    size_t n = nums.size();
+    size_t n = _nums.size();
     std::vector<T> result(n);
 
     for (size_t i = 0; i < n; i++)
     {
-        result[i] = static_cast<T>(nums[i] * static_cast<T>(scale[i]) + static_cast<T>(shift));
+        result[i] = static_cast<T>(_nums[i] * static_cast<T>(_scale[i]) + static_cast<T>(_shift));
     }
 
     return result;
 }
 
 template<Numeric T, Numeric U, Numeric V>
-std::vector<T> Utils::ScaleNShift(const std::vector<T>& nums, U scale, const std::vector<V>& shift)
+std::vector<T> Utils::ScaleNShift(const std::vector<T>& _nums, U _scale, const std::vector<V>& _shift)
 {
-    if (nums.size() != shift.size())
+    if (_nums.size() != _shift.size())
     {
-        throw std::invalid_argument("[Tensor-Utils] Scaling-Shifting failed: size mismatch between nums array and shift array.");
+        throw std::invalid_argument("[Utils] Scaling-Shifting failed: size mismatch between nums array and shift array.");
     }
 
-    size_t n = nums.size();
+    size_t n = _nums.size();
     std::vector<T> result(n);
 
     for (size_t i = 0; i < n; i++)
     {
-        result[i] = static_cast<T>(nums[i] * static_cast<T>(scale) + static_cast<T>(shift[i]));
+        result[i] = static_cast<T>(_nums[i] * static_cast<T>(_scale) + static_cast<T>(_shift[i]));
     }
 
     return result;
 }
 
 template<Numeric T, Numeric U, Numeric V>
-std::vector<T> Utils::ScaleNShift(const std::vector<T>& nums, U scale, V shift)
+std::vector<T> Utils::ScaleNShift(const std::vector<T>& _nums, U _scale, V _shift)
 {
-    size_t n = nums.size();
+    size_t n = _nums.size();
     std::vector<T> result(n);
 
     for (size_t i = 0; i < n; i++)
     {
-        result[i] = static_cast<T>(nums[i] * static_cast<T>(scale) + static_cast<T>(shift));
+        result[i] = static_cast<T>(_nums[i] * static_cast<T>(_scale) + static_cast<T>(_shift));
     }
 
     return result;
 }
-
 
 // ========================================
-// Vector L1 Norm Function
+// Vector Norm Function(s)
 // ========================================
+template<Numeric T, Numeric P>
+double Utils::Norm(const std::vector<T>& _nums, const P& _p)
+{
+    if (_nums.empty())
+    {
+        return 0.0;
+    }
+
+    if (static_cast<double>(_p) < 1.0)
+    {
+        throw std::invalid_argument("[Utils] Norm Computation failed: p-type should be >= 1 for valid and non-quasi norm.");
+    }
+
+    double maxVal = 0.0;
+    for (const auto& value : _nums)
+    {
+        maxVal = std::max(maxVal, std::abs(static_cast<double>(value)));
+    }
+
+    if (std::abs(maxVal) <= 1e-9)
+    {
+        return 0.0;
+    }
+
+    double sum = 0.0;
+    for (const auto& value : _nums)
+    {
+        double scaled = std::abs(static_cast<double>(value)) / maxVal;
+        sum += std::pow(scaled, _p);
+    }
+
+    return maxVal * std::pow(sum, 1.0 / _p);
+}
+
 template<Numeric T>
-double Utils::Norm(const std::vector<T>& nums)
+double Utils::InfinityNorm(const std::vector<T>& _nums)
 {
-    double norm = 0.0;
-    for (const auto& value : nums)
+    if (_nums.empty())
     {
-        norm += (value * value);
+        return 0.0;
     }
 
-    norm = std::sqrt(norm);
-    return norm;
-}
+    double maxVal = 0.0;
 
+    for (const auto& value : _nums)
+    {
+        maxVal = std::max(maxVal, std::abs(static_cast<double>(value)));
+    }
+
+    return maxVal;
+}
 
 // ========================================
 // Vector & Matrix Operation Function(s)
 // ========================================
 template<Numeric T>
-bool Utils::IsRectangular(const std::vector<std::vector<T>>& matrix)
+bool Utils::IsRectangular(const std::vector<std::vector<T>>& _matrix)
 {
     static_assert(std::is_arithmetic_v<T>, "IsRectangular requires a numeric type");
 
-    if (matrix.empty())
+    if (_matrix.empty())
     {
         return true;
     }
 
-    size_t columns = matrix[0].size();
+    size_t columns = _matrix[0].size();
 
-    for (const auto& row : matrix)
+    for (const auto& row : _matrix)
     {
         if (row.size() != columns)
         {
@@ -396,51 +435,4 @@ bool Utils::IsRectangular(const std::vector<std::vector<T>>& matrix)
         }
     }
     return true;
-}
-
-template<Numeric T>
-std::vector<T> Utils::MatrixToVector(const std::vector<std::vector<T>>& matrix)
-{
-    static_assert(std::is_arithmetic_v<T>, "MatrixToVector requires a numeric type");
-
-    if (matrix.empty())
-    {
-        return {};
-    }
-
-    size_t rows = matrix.size();
-    size_t columns = matrix[0].size();
-
-    std::vector<T> nums;
-    nums.reserve(rows * columns);
-
-    for (size_t i = 0; i < rows; i++)
-    {
-        nums.insert(nums.end(), matrix[i].begin(), matrix[i].end());
-    }
-
-    return nums;
-}
-
-template<Numeric T>
-std::vector<std::vector<T>> Utils::VectorToMatrix(const std::vector<T>& vec, std::pair<int, int> shape)
-{
-    static_assert(std::is_arithmetic_v<T>, "VectorToMatrix requires a numeric type");
-
-    long long expected = static_cast<long long>(shape.first) * static_cast<long long>(shape.second);
-    if (expected != static_cast<long long>(vec.size()))
-    {
-        throw std::invalid_argument("[Tensor-Utils] Vector Conversion to Matrix failed: vector size mismatch with volume of shape.");
-    }
-
-    std::vector<std::vector<T>> matrix(shape.first, std::vector<T>(shape.second));
-
-    for (size_t i = 0; i < vec.size(); i++)
-    {
-        size_t k1 = i / static_cast<size_t>(shape.second);
-        size_t k2 = i % static_cast<size_t>(shape.second);
-        matrix[k1][k2] = vec[i];
-    }
-
-    return matrix;
 }

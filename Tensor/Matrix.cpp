@@ -1,4 +1,5 @@
 #include "Matrix.h"
+#include "MatrixDecompResult.h"
 
 // ========================================
 // [Private] Full Row/Column Check Method(s)
@@ -19,6 +20,9 @@ bool LinAlg::Matrix::IsFullRowRank() const
 	return this->Rank() == this->shape.first;
 }
 
+// ========================================
+// [Private] Noise Clearing Method(s)
+// ========================================
 void LinAlg::Matrix::ClearNoise()
 {
 	for (auto& row : this->data)
@@ -33,47 +37,234 @@ void LinAlg::Matrix::ClearNoise()
 	}
 }
 
+// ========================================
+// [Private] Apply Elementwise Operation Method(s)
+// ========================================
 LinAlg::Matrix LinAlg::Matrix::Apply(const std::function<double(double)>& _func) const
 {
-	std::vector<std::vector<double>> result_data(this->shape.first, std::vector<double>(this->shape.second));
+	LinAlg::Matrix result(this->shape, 0.0);
 
 	for (int i = 0; i < this->shape.first; i++)
 	{
 		for (int j = 0; j < this->shape.second; j++)
 		{
-			result_data[i][j] = _func(this->data[i][j]);
+			result.data[i][j] = _func(this->data[i][j]);
 		}
 	}
 
-	return LinAlg::Matrix(result_data);
+	return result;
+}
+
+// ========================================
+// [Private] Helper Matrix Method(s)
+// ========================================
+std::pair<double, double> LinAlg::Matrix::ComputeGivens(const double& _value_1, const double& _value_2) const
+{
+	if (std::abs(_value_2) < LinAlg::Matrix::TOLERANCE)
+	{
+		return { 1.0, 0.0 };
+	}
+
+	if (std::abs(_value_2) > std::abs(_value_1))
+	{
+		double tau = -(_value_1 / _value_2);
+		double s = 1.0 / std::sqrt(1.0 + (tau * tau));
+		double c = s * tau;
+		return { c, s };
+	}
+	else
+	{
+		double tau = -(_value_2 / _value_1);
+		double c = 1.0 / std::sqrt(1.0 + (tau * tau));
+		double s = c * tau;
+		return { c, s };
+	}
+}
+
+double LinAlg::Matrix::WilkinsonShift() const
+{
+	if (this->IsEmpty())
+	{
+		throw std::runtime_error("[Matrix] WilkinsonShift Computation failed: empty Matrix.");
+	}
+
+	if (this->shape.first != 2 || this->shape.second != 2)
+	{
+		throw std::runtime_error("[Matrix] WilkinsonShift Computation failed: Matrix must be of shape(2x2).");
+	}
+
+	double a = this->data[0][0];
+	double b = this->data[0][1];
+	double c = this->data[1][0];
+	double d = this->data[1][1];
+
+	double delta = (a - d) / 2;
+	double sign = (delta >= 0) ? 1.0 : -1.0;
+
+	double D = (delta * delta) + (b * c);
+	D = (std::abs(D) < LinAlg::Matrix::TOLERANCE) ? 0.0 : D;
+
+	if (D < 0.0)
+	{
+		throw std::runtime_error("[Matrix] WilkinsonShift Computation failed: Complex Eigen roots are formed.");
+	}
+
+	double mu = d - (sign * b * c) / (std::abs(delta) + std::sqrt(D));
+
+	return mu;
+}
+
+LinAlg::Matrix LinAlg::Matrix::PartialMatMul(const LinAlg::Matrix& _sub_matrix, const std::pair<int, int>& _start, const std::pair<int, int>& _end, const bool& _left_multiply) const
+{
+	if (_start.first < 0 || _start.second < 0)
+	{
+		throw std::invalid_argument("[Matrix] Partial-MatMul failed: co-ordinate contains negative value.");
+	}
+
+	if (_start.first >= _end.first || _start.second >= _end.second)
+	{
+		throw std::invalid_argument("[Matrix] Partial-MatMul failed: invalid start & end matrix <row, col> pair.");
+	}
+
+	int k = (_left_multiply) ? this->shape.first : this->shape.second;
+
+	if (_end.first > k || _end.second > k)
+	{
+		throw std::invalid_argument("[Matrix] Partial-MatMul failed: co-ordinate value(s) exceeds Matrix shape-bounds.");
+	}
+
+	std::pair<int, int> shape = std::make_pair((_end.first - _start.first), (_end.second - _start.second));
+
+	if (_sub_matrix.shape != shape)
+	{
+		throw std::invalid_argument("[Matrix] Partial-MatMul failed: shape mismatch between sub-Matrix and co-ordinate bounds.");
+	}
+
+	LinAlg::Matrix result = *this;
+
+	if (_left_multiply)
+	{
+		for (int row = _start.first, r = 0; row < _end.first && r < _sub_matrix.shape.first; row++, r++)
+		{
+			for (int col = 0; col < result.shape.second; col++)
+			{
+				double product = 0.0;
+				for (int p = _start.second, q = 0; p < _end.second && q < _sub_matrix.shape.second; p++, q++)
+				{
+					product += (_sub_matrix.data[r][q] * this->data[p][col]);
+				}
+				product += (_start.second <= row && _end.second > row) ? 0.0 : this->data[row][col];
+
+				result.data[row][col] = product;
+			}
+		}
+	}
+	else
+	{
+		for (int row = 0; row < result.shape.first; row++)
+		{
+			for (int col = _start.second, c = 0; col < _end.second && c < _sub_matrix.shape.second; col++, c++)
+			{
+				double product = 0.0;
+				for (int p = _start.first, q = 0; p < _end.first && q < _sub_matrix.shape.first; p++, q++)
+				{
+					product += (this->data[row][p] * _sub_matrix.data[q][c]);
+				}
+				product += (_start.first <= col && _end.first > col) ? 0.0 : this->data[row][col];
+
+				result.data[row][col] = product;
+			}
+		}
+	}
+
+	return result;
+}
+
+void LinAlg::Matrix::PermuteRows(const std::vector<int>& _permutation)
+{
+	if (this->IsEmpty())
+	{
+		throw std::runtime_error("[Matrix] Row Permutation failed: empty Matrix for permutation.");
+	}
+
+	if (static_cast<int>(_permutation.size()) != this->shape.first)
+	{
+		throw std::invalid_argument("[Matrix] Row Permutation failed: permutation array size mismatch with Matrix row-count.");
+	}
+
+	if (Utils::IsAnyNegative(_permutation))
+	{
+		throw std::invalid_argument("[Matrix] Row Permutation failed: negative value found in permutation array.");
+	}
+
+	if (!Utils::IsBounded(_permutation, this->shape.first, -1, true))
+	{
+		throw std::invalid_argument("[Matrix] Row Permutation failed: unbounded values found in permutation array w.r.t Matrix row-count.");
+	}
+
+	std::vector<int> points(_permutation.size());
+	for (int p = 0; p < _permutation.size(); p++)
+	{
+		points[_permutation[p]] = p;
+	}
+
+	std::vector<double> temp = this->data[0];
+	int from = 0;
+
+	do
+	{
+		int to = points[from];
+		std::swap(temp, this->data[to]);
+
+		from = to;
+	} while (from != 0);
+}
+
+void LinAlg::Matrix::PermuteColumns(const std::vector<int>& _permutation)
+{
+	if (this->IsEmpty())
+	{
+		throw std::runtime_error("[Matrix] Column Permutation failed: empty Matrix for permutation.");
+	}
+
+	if (static_cast<int>(_permutation.size()) != this->shape.second)
+	{
+		throw std::invalid_argument("[Matrix] Column Permutation failed: permutation array size mismatch with Matrix column-count.");
+	}
+
+	if (Utils::IsAnyNegative(_permutation))
+	{
+		throw std::invalid_argument("[Matrix] Column Permutation failed: negative value found in permutation array.");
+	}
+
+	if (!Utils::IsBounded(_permutation, this->shape.second, -1, true))
+	{
+		throw std::invalid_argument("[Matrix] Column Permutation failed: unbounded values found in permutation array w.r.t Matrix column-count.");
+	}
+
+	std::vector<int> points(_permutation.size());
+	for (int p = 0; p < _permutation.size(); p++)
+	{
+		points[_permutation[p]] = p;
+	}
+
+	std::vector<double> temp = this->GetColumn(0);
+	int from = 0;
+
+	do
+	{
+		int to = points[from];
+		for (int row = 0; row < this->shape.first; row++)
+		{
+			std::swap(temp[row], this->data[row][to]);
+		}
+		from = to;
+	} while (from != 0);
 }
 
 // ========================================
 // Matrix Constructor(s)
 // ========================================
-LinAlg::Matrix::Matrix(const std::vector<std::vector<double>>& _matrix)
-{
-	size_t rows = _matrix.size();
-	size_t columns = 0;
-	for (const auto& row : _matrix)
-	{
-		columns = std::max(columns, row.size());
-	}
-
-	this->shape = { static_cast<int>(rows), static_cast<int>(columns) };
-	this->volume = (rows * columns);
-
-	this->data.assign(rows, std::vector<double>(columns, 0.0));
-
-	for (size_t i = 0; i < rows; i++)
-	{
-		for (size_t j = 0; j < columns; j++)
-		{
-			this->data[i][j] = (j < _matrix[i].size()) ? _matrix[i][j] : 0;
-		}
-	}
-}
-
 LinAlg::Matrix::Matrix(const std::pair<int, int>& _shape, const double& _value)
 {
 	if (_shape.first <= 0 || _shape.second <= 0)
@@ -92,11 +283,16 @@ LinAlg::Matrix::Matrix(const std::pair<int, int>& _shape, const double& _value)
 	this->data.assign(this->shape.first, std::vector<double>(this->shape.second, _value));
 }
 
-LinAlg::Matrix::Matrix(const std::pair<int, int>& _shape, std::vector<double>& _data)
+LinAlg::Matrix::Matrix(const std::pair<int, int>& _shape, const std::vector<double>& _data)
 {
 	if (_shape.first <= 0 || _shape.second <= 0)
 	{
 		throw std::invalid_argument("[Matrix] Constructor failed: no. of row and column of a matrix must be > 0.");
+	}
+
+	if (!Utils::IsValidData(_data))
+	{
+		throw std::invalid_argument("[Matrix] Constructor failed: invalid value found in data.");
 	}
 
 	this->shape = { _shape.first, _shape.second };
@@ -128,14 +324,14 @@ LinAlg::Matrix LinAlg::Matrix::Identity(const int& _n, const double& _scale)
         throw std::invalid_argument("[Matrix] Identity Matrix Build failed: row/column size of matrix must be > 0.");
     }
 
-	std::vector<std::vector<double>> I_matrix(_n, std::vector<double>(_n, 0.0));
+	LinAlg::Matrix I_matrix({ _n, _n }, 0.0);
 
-    for (int i = 0; i < _n; i++)
+    for (int row = 0; row < _n; row++)
     {
-		I_matrix[i][i] = _scale;
+		I_matrix.data[row][row] = _scale;
     }
 
-    return LinAlg::Matrix(I_matrix);
+    return I_matrix;
 }
 
 LinAlg::Matrix LinAlg::Matrix::RandomUniform(const int& _rows, const int& _columns, const double& _min_value, const double& _max_value, std::optional<unsigned int> seed)
@@ -163,17 +359,17 @@ LinAlg::Matrix LinAlg::Matrix::RandomUniform(const int& _rows, const int& _colum
 
     std::uniform_real_distribution<double> dist(_min_value, _max_value);
 
-	std::vector<std::vector<double>> uniform_matrix(_rows, std::vector<double>(_columns));
+	LinAlg::Matrix uniform_matrix({ _rows, _columns }, 0.0);
 
-    for (int i = 0; i < _rows; i++)
+    for (int row = 0; row < _rows; row++)
     {
-        for (int j = 0; j < _columns; j++)
+        for (int col = 0; col < _columns; col++)
         {
-			uniform_matrix[i][j] = dist(generator);
+			uniform_matrix.data[row][col] = dist(generator);
         }
     }
 
-    return LinAlg::Matrix(uniform_matrix);
+    return uniform_matrix;
 }
 
 LinAlg::Matrix LinAlg::Matrix::RandomNormal(const int& _rows, const int& _columns, const double& _mean, const double& _std_dev, std::optional<unsigned int> seed)
@@ -201,17 +397,17 @@ LinAlg::Matrix LinAlg::Matrix::RandomNormal(const int& _rows, const int& _column
 
 	std::normal_distribution<double> dist(_mean, _std_dev);
 
-	std::vector<std::vector<double>> normal_matrix(_rows, std::vector<double>(_columns));
+	LinAlg::Matrix normal_matrix({ _rows, _columns }, 0.0);
 
-	for (int i = 0; i < _rows; i++)
+	for (int row = 0; row < _rows; row++)
 	{
-		for (int j = 0; j < _columns; j++)
+		for (int col = 0; col < _columns; col++)
 		{
-			normal_matrix[i][j] = dist(generator);
+			normal_matrix.data[row][col] = dist(generator);
 		}
 	}
 	
-	return LinAlg::Matrix(normal_matrix);
+	return normal_matrix;
 }
 
 LinAlg::Matrix LinAlg::Matrix::Diagonal(const std::vector<double>& _diag_values)
@@ -222,14 +418,14 @@ LinAlg::Matrix LinAlg::Matrix::Diagonal(const std::vector<double>& _diag_values)
 		throw std::invalid_argument("[Matrix] Diagonal Matrix Build failed: empty diagonal array.");
 	}
 
-	std::vector<std::vector<double>> diagonal_matrix(n, std::vector<double>(n, 0.0));
+	LinAlg::Matrix diagonal_matrix({ n, n }, 0.0);
 	
-	for (int i = 0; i < n; i++)
+	for (int row = 0; row < n; row++)
 	{
-		diagonal_matrix[i][i] = _diag_values[i];
+		diagonal_matrix.data[row][row] = _diag_values[row];
 	}
 
-	return LinAlg::Matrix(diagonal_matrix);
+	return diagonal_matrix;
 }
 
 // ========================================
@@ -285,6 +481,97 @@ bool LinAlg::Matrix::IsDiagonal(const double& _tolerance) const
 			}
 		}
 	}
+	return true;
+}
+
+bool LinAlg::Matrix::IsBidiagonal(const std::string& _type, const double& _tolerance) const
+{
+	if (this->IsEmpty())
+	{
+		return false;
+	}
+
+	std::string type = _type;
+
+	std::transform(type.begin(), type.end(), type.begin(),
+		[](unsigned char c) { return std::tolower(c); });
+
+	bool is_upper_diagonal = false;
+	bool is_lower_diagonal = false;
+
+	for (int row = 0; row < this->shape.first; row++)
+	{
+		for (int col = 0; col < this->shape.second; col++)
+		{
+			bool non_zero = (std::abs(this->data[row][col]) > _tolerance);
+			int d = row - col;
+
+			if (type == "any")
+			{
+				if (non_zero && d != 0)
+				{
+					if (d == -1)
+					{
+						is_upper_diagonal = true;
+					}
+					else if (d == 1)
+					{
+						is_lower_diagonal = true;
+					}
+					else
+					{
+						return false;
+					}
+				}
+
+				if (is_upper_diagonal && is_lower_diagonal)
+				{
+					return false;
+				}
+			}
+			else if (type == "upper")
+			{
+				if (non_zero && d != 0 && d != -1)
+				{
+					return false;
+				}
+			}
+			else if(type == "lower")
+			{
+				if (non_zero && d != 0 && d != 1)
+				{
+					return false;
+				}
+			}
+			else
+			{
+				throw std::invalid_argument("[Matrix] Is Bidiagonal Check failed: got invalid type for bidiagonal Matrix check.");
+			}
+		}
+	}
+
+	return true;
+}
+
+bool LinAlg::Matrix::IsTridiagonal(const double& _tolerance) const
+{
+	if (this->IsEmpty() || !this->IsSquare())
+	{
+		return false;
+	}
+
+	for (int row = 0; row < this->shape.first; row++)
+	{
+		for (int col = 0; col < this->shape.second; col++)
+		{
+			int d = std::abs(row - col);
+			if (std::abs(this->data[row][col]) > _tolerance && d > 1)
+			{
+				return false;
+			}
+		}
+	}
+
 	return true;
 }
 
@@ -376,7 +663,7 @@ bool LinAlg::Matrix::IsOrthogonal() const
 	}
 
 	// Optimize this later:
-	LinAlg::Matrix result = this->DotProduct(this->Transpose());
+	LinAlg::Matrix result = this->MatMul(this->Transpose());
 
 	if (result == LinAlg::Matrix::Identity(this->shape.first))
 	{
@@ -401,7 +688,7 @@ bool LinAlg::Matrix::IsIdempotent() const
 		return false;
 	}
 
-	LinAlg::Matrix result = this->DotProduct(*this);
+	LinAlg::Matrix result = this->MatMul(*this);
 
 	if (result == *this)
 	{
@@ -480,6 +767,7 @@ LinAlg::Matrix LinAlg::Matrix::operator+(const double& _scalar) const
 		}
 	}
 
+	result.ClearNoise();
 	return result;
 }
 
@@ -500,6 +788,7 @@ LinAlg::Matrix LinAlg::Matrix::operator-(const double& _scalar) const
 		}
 	}
 
+	result.ClearNoise();
 	return result;
 }
 
@@ -520,6 +809,7 @@ LinAlg::Matrix LinAlg::Matrix::operator*(const double& _scalar) const
 		}
 	}
 
+	result.ClearNoise();
 	return result;
 }
 
@@ -545,6 +835,7 @@ LinAlg::Matrix LinAlg::Matrix::operator/(const double& _scalar) const
 		}
 	}
 
+	result.ClearNoise();
 	return result;
 }
 
@@ -570,6 +861,7 @@ LinAlg::Matrix LinAlg::Matrix::operator+(const std::vector<double>& _vector) con
 		}
 	}
 
+	result.ClearNoise();
 	return result;
 }
 
@@ -595,6 +887,7 @@ LinAlg::Matrix LinAlg::Matrix::operator-(const std::vector<double>& _vector) con
 		}
 	}
 
+	result.ClearNoise();
 	return result;
 }
 
@@ -620,6 +913,7 @@ LinAlg::Matrix LinAlg::Matrix::operator*(const std::vector<double>& _vector) con
 		}
 	}
 
+	result.ClearNoise();
 	return result;
 }
 
@@ -649,6 +943,7 @@ LinAlg::Matrix LinAlg::Matrix::operator/(const std::vector<double>& _vector) con
 		}
 	}
 
+	result.ClearNoise();
 	return result;
 }
 
@@ -669,6 +964,7 @@ LinAlg::Matrix LinAlg::Matrix::operator+(const LinAlg::Matrix& _matrix) const
 		}
 	}
 
+	result.ClearNoise();
 	return result;
 }
 
@@ -689,6 +985,7 @@ LinAlg::Matrix LinAlg::Matrix::operator-(const LinAlg::Matrix& _matrix) const
 		}
 	}
 
+	result.ClearNoise();
 	return result;
 }
 
@@ -709,6 +1006,7 @@ LinAlg::Matrix LinAlg::Matrix::operator*(const LinAlg::Matrix& _matrix) const
 		}
 	}
 
+	result.ClearNoise();
 	return result;
 }
 
@@ -733,6 +1031,7 @@ LinAlg::Matrix LinAlg::Matrix::operator/(const LinAlg::Matrix& _matrix) const
 		}
 	}
 
+	result.ClearNoise();
 	return result;
 }
 
@@ -753,6 +1052,8 @@ void LinAlg::Matrix::operator+=(const double& _scalar)
 			this->data[i][j] += _scalar;
 		}
 	}
+
+	this->ClearNoise();
 }
 
 void LinAlg::Matrix::operator-=(const double& _scalar)
@@ -769,6 +1070,8 @@ void LinAlg::Matrix::operator-=(const double& _scalar)
 			this->data[i][j] -= _scalar;
 		}
 	}
+
+	this->ClearNoise();
 }
 
 void LinAlg::Matrix::operator*=(const double& _scalar)
@@ -785,6 +1088,8 @@ void LinAlg::Matrix::operator*=(const double& _scalar)
 			this->data[i][j] *= _scalar;
 		}
 	}
+
+	this->ClearNoise();
 }
 
 void LinAlg::Matrix::operator/=(const double& _scalar)
@@ -806,6 +1111,8 @@ void LinAlg::Matrix::operator/=(const double& _scalar)
 			this->data[i][j] /= _scalar;
 		}
 	}
+
+	this->ClearNoise();
 }
 
 void LinAlg::Matrix::operator+=(const std::vector<double>& _vector)
@@ -827,6 +1134,8 @@ void LinAlg::Matrix::operator+=(const std::vector<double>& _vector)
 			this->data[i][j] += _vector[j];
 		}
 	}
+
+	this->ClearNoise();
 }
 
 void LinAlg::Matrix::operator-=(const std::vector<double>& _vector)
@@ -848,6 +1157,8 @@ void LinAlg::Matrix::operator-=(const std::vector<double>& _vector)
 			this->data[i][j] -= _vector[j];
 		}
 	}
+
+	this->ClearNoise();
 }
 
 void LinAlg::Matrix::operator*=(const std::vector<double>& _vector)
@@ -869,6 +1180,8 @@ void LinAlg::Matrix::operator*=(const std::vector<double>& _vector)
 			this->data[i][j] *= _vector[j];
 		}
 	}
+
+	this->ClearNoise();
 }
 
 void LinAlg::Matrix::operator/=(const std::vector<double>& _vector)
@@ -898,6 +1211,8 @@ void LinAlg::Matrix::operator/=(const std::vector<double>& _vector)
 			this->data[i][j] /= _vector[j];
 		}
 	}
+
+	this->ClearNoise();
 }
 
 void LinAlg::Matrix::operator+=(const LinAlg::Matrix& _matrix)
@@ -914,6 +1229,8 @@ void LinAlg::Matrix::operator+=(const LinAlg::Matrix& _matrix)
 			this->data[i][j] += _matrix.data[i][j];
 		}
 	}
+
+	this->ClearNoise();
 }
 
 void LinAlg::Matrix::operator-=(const LinAlg::Matrix& _matrix)
@@ -930,6 +1247,8 @@ void LinAlg::Matrix::operator-=(const LinAlg::Matrix& _matrix)
 			this->data[i][j] -= _matrix.data[i][j];
 		}
 	}
+
+	this->ClearNoise();
 }
 
 void LinAlg::Matrix::operator*=(const LinAlg::Matrix& _matrix)
@@ -946,6 +1265,8 @@ void LinAlg::Matrix::operator*=(const LinAlg::Matrix& _matrix)
 			this->data[i][j] *= _matrix.data[i][j];
 		}
 	}
+
+	this->ClearNoise();
 }
 
 void LinAlg::Matrix::operator/=(const LinAlg::Matrix& _matrix)
@@ -973,6 +1294,8 @@ void LinAlg::Matrix::operator/=(const LinAlg::Matrix& _matrix)
 			this->data[i][j] /= _matrix.data[i][j];
 		}
 	}
+
+	this->ClearNoise();
 }
 
 // ========================================
@@ -995,6 +1318,7 @@ LinAlg::Matrix LinAlg::Matrix::AddColumnwise(const std::vector<double>& _vector)
 		}
 	}
 
+	result.ClearNoise();
 	return result;
 }
 
@@ -1015,6 +1339,7 @@ LinAlg::Matrix LinAlg::Matrix::SubtractColumnwise(const std::vector<double>& _ve
 		}
 	}
 
+	result.ClearNoise();
 	return result;
 }
 
@@ -1035,6 +1360,7 @@ LinAlg::Matrix LinAlg::Matrix::MultiplyColumnwise(const std::vector<double>& _ve
 		}
 	}
 
+	result.ClearNoise();
 	return result;
 }
 
@@ -1059,13 +1385,14 @@ LinAlg::Matrix LinAlg::Matrix::DivideColumnwise(const std::vector<double>& _vect
 		}
 	}
 
+	result.ClearNoise();
 	return result;
 }
 
 // ========================================
 // Matrix Multiplication Method(s)
 // ========================================
-LinAlg::Matrix LinAlg::Matrix::DotProduct(const std::vector<std::vector<double>>& _matrix) const
+LinAlg::Matrix LinAlg::Matrix::MatMul(const std::vector<std::vector<double>>& _matrix) const
 {
 	if (_matrix.empty() || !Utils::IsRectangular(_matrix))
 	{
@@ -1080,32 +1407,34 @@ LinAlg::Matrix LinAlg::Matrix::DotProduct(const std::vector<std::vector<double>>
 		throw std::invalid_argument("[Matrix] Matrix Multiplication failed: row number of input matrix mismatch with total columns of Matrix.");
 	}
 
-	std::vector<std::vector<double>> result(this->shape.first, std::vector<double>(columns, 0.0));
+	LinAlg::Matrix result({ this->shape.first, columns }, 0.0);
 
-	for (int i = 0; i < this->shape.first; i++)
+	for (int row = 0; row < this->shape.first; row++)
 	{
-		for (int j = 0; j < columns; j++)
+		for (int col = 0; col < columns; col++)
 		{
+			double res = 0.0;
 			for (int k = 0; k < rows; k++)
 			{
-				result[i][j] += (this->data[i][k] * _matrix[k][j]);
+				res += (this->data[row][k] * _matrix[k][col]);
 			}
 
-			result[i][j] = (std::abs(result[i][j]) < LinAlg::Matrix::TOLERANCE) ? 0.0 : result[i][j];
+			res = (std::abs(res) < LinAlg::Matrix::TOLERANCE) ? 0.0 : res;
+			result.data[row][col] = res;
 		}
 	}
 
-	return LinAlg::Matrix(result);
+	return result;
 }
 
-LinAlg::Matrix LinAlg::Matrix::DotProduct(const LinAlg::Matrix& _matrix) const
+LinAlg::Matrix LinAlg::Matrix::MatMul(const LinAlg::Matrix& _matrix) const
 {
-	return this->DotProduct(_matrix.data);
+	return this->MatMul(_matrix.data);
 }
 
-LinAlg::Matrix LinAlg::Matrix::DotProduct(const LinAlg::Matrix& _matrix_1, const LinAlg::Matrix& _matrix_2)
+LinAlg::Matrix LinAlg::Matrix::MatMul(const LinAlg::Matrix& _matrix_1, const LinAlg::Matrix& _matrix_2)
 {
-	return _matrix_1.DotProduct(_matrix_2);
+	return _matrix_1.MatMul(_matrix_2);
 }
 
 // ========================================
@@ -1118,17 +1447,17 @@ LinAlg::Matrix LinAlg::Matrix::Transpose() const
 		return LinAlg::Matrix();
 	}
 
-	std::vector<std::vector<double>> transposed_data(this->shape.second, std::vector<double>(this->shape.first));
+	LinAlg::Matrix transposed_matrix({ this->shape.second, this->shape.first }, 0.0);
 
-	for (int i = 0; i < this->shape.first; i++)
+	for (int row = 0; row < this->shape.first; row++)
 	{
-		for (int j = 0; j < this->shape.second; j++)
+		for (int col = 0; col < this->shape.second; col++)
 		{
-			transposed_data[j][i] = this->data[i][j];
+			transposed_matrix.data[col][row] = this->data[row][col];
 		}
 	}
 
-	return LinAlg::Matrix(transposed_data);
+	return transposed_matrix;
 }
 
 // ========================================
@@ -1175,43 +1504,8 @@ LinAlg::Matrix LinAlg::Matrix::Inverse() const
 
 LinAlg::Matrix LinAlg::Matrix::PseudoInverse() const
 {
-	if (this->IsEmpty())
-	{
-		throw std::runtime_error("[Matrix] Pseudoinverse failed: empty matrix.");
-	}
-
-	int m = this->shape.first;
-	int n = this->shape.second;
-	int rank = this->Rank();
-
-	if (m == n && rank == n)
-	{
-		return this->Inverse();
-	}
-
-	if (rank == n && m >= n)
-	{
-		LinAlg::Matrix At = this->Transpose();
-		LinAlg::Matrix AtA = At.DotProduct(*this);
-		LinAlg::Matrix AtA_inv = AtA.Inverse();
-		return AtA_inv.DotProduct(At);
-	}
-
-	if (rank == m && n >= m)
-	{
-		LinAlg::Matrix At = this->Transpose();
-		LinAlg::Matrix AAt = this->DotProduct(At);
-		LinAlg::Matrix AAt_inv = AAt.Inverse();
-		return At.DotProduct(AAt_inv);
-	}
-
-	// Case 4: Rank-deficient - requires SVD
-	throw std::runtime_error(
-		"[Matrix] Pseudoinverse failed: matrix is rank-deficient (rank=" +
-		std::to_string(rank) + ", shape=(" + std::to_string(m) + "," +
-		std::to_string(n) + ")). Please implement SVD first, then use " +
-		"SVD-based pseudoinverse for general cases."
-	);
+	// Build after SVD is done.
+	return LinAlg::Matrix();
 }
 
 // ========================================
@@ -1249,21 +1543,21 @@ LinAlg::EliminationResult LinAlg::Matrix::GaussianElimination(const LinAlg::Matr
 		int max_row = pivot_row;
 		double max_val = std::abs(coeff_matrix.data[pivot_row][pivot_col]);
 
-		for (int r = pivot_row + 1; r < rows; r++)
+		for (int row = pivot_row + 1; row < rows; row++)
 		{
-			double val = std::abs(coeff_matrix.data[r][pivot_col]);
+			double val = std::abs(coeff_matrix.data[row][pivot_col]);
 			if (val > max_val)
 			{
 				max_val = val;
-				max_row = r;
+				max_row = row;
 			}
 		}
 
 		if (max_val < LinAlg::Matrix::TOLERANCE)
 		{
-			for (int r = pivot_row; r < rows; r++)
+			for (int row = pivot_row; row < rows; row++)
 			{
-				coeff_matrix.data[r][pivot_col] = 0.0;
+				coeff_matrix.data[row][pivot_col] = 0.0;
 			}
 			continue;
 		}
@@ -1275,33 +1569,33 @@ LinAlg::EliminationResult LinAlg::Matrix::GaussianElimination(const LinAlg::Matr
 			swap_count++;
 		}
 
-		for (int k = pivot_row + 1; k < rows; k++)
+		for (int row = pivot_row + 1; row < rows; row++)
 		{
-			double factor = coeff_matrix.data[k][pivot_col] / coeff_matrix.data[pivot_row][pivot_col];
+			double factor = coeff_matrix.data[row][pivot_col] / coeff_matrix.data[pivot_row][pivot_col];
 
 			if (std::abs(factor) < LinAlg::Matrix::TOLERANCE)
 			{
-				coeff_matrix.data[k][pivot_col] = 0.0;
+				coeff_matrix.data[row][pivot_col] = 0.0;
 				continue;
 			}
 
-			for (int c = pivot_col; c < columns; c++)
+			for (int col = pivot_col; col < columns; col++)
 			{
-				coeff_matrix.data[k][c] -= factor * coeff_matrix.data[pivot_row][c];
+				coeff_matrix.data[row][col] -= factor * coeff_matrix.data[pivot_row][col];
 
-				if (std::abs(coeff_matrix.data[k][c]) < LinAlg::Matrix::TOLERANCE)
+				if (std::abs(coeff_matrix.data[row][col]) < LinAlg::Matrix::TOLERANCE)
 				{
-					coeff_matrix.data[k][c] = 0.0;
+					coeff_matrix.data[row][col] = 0.0;
 				}
 			}
 
-			for (int c = 0; c < columns; c++)
+			for (int col = 0; col < aug_matrix.shape.second; col++)
 			{
-				aug_matrix.data[k][c] -= factor * aug_matrix.data[pivot_row][c];
+				aug_matrix.data[row][col] -= factor * aug_matrix.data[pivot_row][col];
 
-				if (std::abs(aug_matrix.data[k][c]) < LinAlg::Matrix::TOLERANCE)
+				if (std::abs(aug_matrix.data[row][col]) < LinAlg::Matrix::TOLERANCE)
 				{
-					aug_matrix.data[k][c] = 0.0;
+					aug_matrix.data[row][col] = 0.0;
 				}
 			}
 		}
@@ -1322,17 +1616,16 @@ LinAlg::EliminationResult LinAlg::Matrix::GaussJordanElimination(const LinAlg::M
 
 	LinAlg::EliminationResult ref = this->GaussianElimination(_aug_matrix);
 
-	int i = ref.rank - 1;
 	int pivot = ref.A.shape.second - 1;
 
-	for (int i = ref.rank - 1; i >= 0; i--)
+	for (int row = ref.rank - 1; row >= 0; row--)
 	{
 		int pivot = -1;
-		for (int j = 0; j < ref.A.shape.second; j++)
+		for (int col = 0; col < ref.A.shape.second; col++)
 		{
-			if (std::abs(ref.A.data[i][j]) > LinAlg::Matrix::TOLERANCE)
+			if (std::abs(ref.A.data[row][col]) > LinAlg::Matrix::TOLERANCE)
 			{
-				pivot = j;
+				pivot = col;
 				break;
 			}
 		}
@@ -1342,19 +1635,19 @@ LinAlg::EliminationResult LinAlg::Matrix::GaussJordanElimination(const LinAlg::M
 			continue;
 		}
 
-		double pivot_value = ref.A.data[i][pivot];
+		double pivot_value = ref.A.data[row][pivot];
 
-		for (int c = pivot; c < ref.A.shape.second; c++)
+		for (int col = pivot; col < ref.A.shape.second; col++)
 		{
-			ref.A.data[i][c] /= pivot_value;
+			ref.A.data[row][col] /= pivot_value;
 		}
 
-		for (int c = 0; c < ref.B.shape.second; c++)
+		for (int col = 0; col < ref.B.shape.second; col++)
 		{
-			ref.B.data[i][c] /= pivot_value;
+			ref.B.data[row][col] /= pivot_value;
 		}
 
-		for (int r = 0; r < i; r++)
+		for (int r = 0; r < row; r++)
 		{
 			double factor = ref.A.data[r][pivot];
 
@@ -1365,12 +1658,12 @@ LinAlg::EliminationResult LinAlg::Matrix::GaussJordanElimination(const LinAlg::M
 
 			for (int c = pivot; c < ref.A.shape.second; c++)
 			{
-				ref.A.data[r][c] -= (factor * ref.A.data[i][c]);
+				ref.A.data[r][c] -= (factor * ref.A.data[row][c]);
 			}
 
 			for (int c = 0; c < ref.B.shape.second; c++)
 			{
-				ref.B.data[r][c] -= (factor * ref.B.data[i][c]);
+				ref.B.data[r][c] -= (factor * ref.B.data[row][c]);
 			}
 		}
 	}
@@ -1700,14 +1993,14 @@ LinAlg::Matrix LinAlg::Matrix::Reshape(const std::pair<int, int> _shape) const
 		throw std::invalid_argument("[Matrix] Reshaping Matrix failed: shape-volume mismatch with Matrix volume.");
 	}
 
-	std::vector<std::vector<double>> reshaped_data(_shape.first, std::vector<double>(_shape.second));
+	LinAlg::Matrix reshaped_matrix({ _shape.first, _shape.second }, 0.0);
 
 	int r = 0, c = 0;
-	for (int i = 0; i < this->shape.first; i++)
+	for (int row = 0; row < this->shape.first; row++)
 	{
-		for (int j = 0; j < this->shape.second; j++)
+		for (int col = 0; col < this->shape.second; col++)
 		{
-			reshaped_data[r][c] = this->data[i][j];
+			reshaped_matrix.data[r][c] = this->data[row][col];
 
 			c++;
 			if (c >= _shape.second)
@@ -1718,7 +2011,7 @@ LinAlg::Matrix LinAlg::Matrix::Reshape(const std::pair<int, int> _shape) const
 		}
 	}
 
-	return LinAlg::Matrix(reshaped_data);
+	return reshaped_matrix;
 }
 
 // ========================================
@@ -1738,9 +2031,7 @@ void LinAlg::Matrix::SwapRows(const int& _row_1, const int& _row_2)
 
 	for (int i = 0; i < this->shape.second; i++)
 	{
-		double temp = this->data[_row_1][i];
-		this->data[_row_1][i] = this->data[_row_2][i];
-		this->data[_row_2][i] = temp;
+		std::swap(this->data[_row_1][i], this->data[_row_2][i]);
 	}
 }
 
@@ -1758,16 +2049,50 @@ void LinAlg::Matrix::SwapColumns(const int& _col_1, const int& _col_2)
 
 	for (int i = 0; i < this->shape.first; i++)
 	{
-		double temp = this->data[i][_col_1];
-		this->data[i][_col_1] = this->data[i][_col_2];
-		this->data[i][_col_2] = temp;
+		std::swap(this->data[i][_col_1], this->data[i][_col_2]);
 	}
 }
 
 // ========================================
-// Matrix Accessing & Indexing Method(s)
+// Matrix Patching Method
 // ========================================
-LinAlg::Matrix LinAlg::Matrix::Submatrix(const std::pair<int, int> _start, const std::pair<int, int> _end) const
+void LinAlg::Matrix::Patch(const LinAlg::Matrix& _matrix, const std::pair<int, int>& _start, const std::pair<int, int>& _end)
+{
+	if (_start.first < 0 || _start.second < 0)
+	{
+		throw std::invalid_argument("[Matrix] Patching failed: co-ordinate(s) contains negative value.");
+	}
+
+	if (_start.first >= _end.first || _start.second >= _end.second)
+	{
+		throw std::invalid_argument("[Matrix] Patching failed: invalid start & end matrix <row, col> pair.");
+	}
+
+	if (_end.first > this->shape.first || _end.second > this->shape.second)
+	{
+		throw std::invalid_argument("[Matrix] Patching failed: co-ordinate value(s) exceeds Matrix shape-bounds.");
+	}
+
+	std::pair<int, int> shape = std::make_pair((_end.first - _start.first), (_end.second - _start.second));
+
+	if (_matrix.shape != shape)
+	{
+		throw std::invalid_argument("[Matrix] Patching failed: shape mismatch between sub-Matrix and co-ordinate bounds.");
+	}
+
+	for (int row = _start.first, r = 0; row < _end.first; row++, r++)
+	{
+		for (int col = _start.second, c = 0; col < _end.second; col++, c++)
+		{
+			this->data[row][col] = _matrix.data[r][c];
+		}
+	}
+}
+
+// ========================================
+// Matrix Getter (Accessing/Indexing) Method(s)
+// ========================================
+LinAlg::Matrix LinAlg::Matrix::Submatrix(const std::pair<int, int>& _start, const std::pair<int, int>& _end) const
 {
 	if (_start.first < 0 || _start.second < 0 || _start.first >= this->shape.first || _start.second >= this->shape.second)
 	{
@@ -1792,17 +2117,17 @@ LinAlg::Matrix LinAlg::Matrix::Submatrix(const std::pair<int, int> _start, const
 	int rows = _end.first - _start.first;
 	int columns = _end.second - _start.second;
 
-	std::vector<std::vector<double>> sub_matrix(rows, std::vector<double>(columns));
+	LinAlg::Matrix sub_matrix({ rows, columns }, 0.0);
 
-	for (int i = _start.first, r = 0; i < _end.first; i++, r++)
+	for (int row = _start.first, r = 0; row < _end.first; row++, r++)
 	{
-		for (int j = _start.second, c = 0; j < _end.second; j++, c++)
+		for (int col = _start.second, c = 0; col < _end.second; col++, c++)
 		{
-			sub_matrix[r][c] = this->data[i][j];
+			sub_matrix.data[r][c] = this->data[row][col];
 		}
 	}
 
-	return LinAlg::Matrix(sub_matrix);
+	return sub_matrix;
 }
 
 std::vector<double> LinAlg::Matrix::GetRow(const int& _row_index) const
@@ -1850,17 +2175,17 @@ LinAlg::Matrix LinAlg::Matrix::GetRows(const std::vector<int>& _row_indices) con
 		row_filter[index] = true;
 	}
 
-	std::vector<std::vector<double>> sub_matrix;
+	LinAlg::Matrix sub_matrix;
 
-	for (int i = 0; i < this->shape.first; i++)
+	for (int row = 0; row < this->shape.first; row++)
 	{
-		if (row_filter[i])
+		if (row_filter[row])
 		{
-			sub_matrix.push_back(this->GetRow(i));
+			sub_matrix.PushRow(this->GetRow(row));
 		}
 	}
 
-	return LinAlg::Matrix(sub_matrix);
+	return sub_matrix;
 }
 
 LinAlg::Matrix LinAlg::Matrix::GetColumns(const std::vector<int>& _column_indices) const
@@ -1881,17 +2206,17 @@ LinAlg::Matrix LinAlg::Matrix::GetColumns(const std::vector<int>& _column_indice
 		column_filter[index] = true;
 	}
 
-	std::vector<std::vector<double>> sub_matrix;
+	LinAlg::Matrix sub_matrix;
 
 	for (int i = 0; i < this->shape.second; i++)
 	{
 		if (column_filter[i])
 		{
-			sub_matrix.push_back(this->GetColumn(i));
+			sub_matrix.PushColumn(this->GetColumn(i));
 		}
 	}
 
-	return LinAlg::Matrix(sub_matrix);
+	return sub_matrix;
 }
 
 std::vector<double> LinAlg::Matrix::GetFlatData() const
@@ -1914,6 +2239,58 @@ std::vector<double> LinAlg::Matrix::GetFlatData() const
 }
 
 // ========================================
+// Matrix Row/Column Append Method(s)
+// ========================================
+void LinAlg::Matrix::PushRow(const std::vector<double>& _row_data)
+{
+	if (!this->IsEmpty() && _row_data.size() != this->shape.second)
+	{
+		throw std::invalid_argument("[Matrix] Row Appending failed: row array-size mismatch with Matrix column-size.");
+	}
+
+	if (!Utils::IsValidData(_row_data))
+	{
+		throw std::invalid_argument("[Matrix] Row Appending failed: invalid value found in row-data.");
+	}
+
+	this->shape.first++;
+	this->volume += _row_data.size();
+	this->data.push_back(_row_data);
+}
+
+void LinAlg::Matrix::PushColumn(const std::vector<double>& _column_data)
+{
+	if (!this->IsEmpty() && _column_data.size() != this->shape.second)
+	{
+		throw std::invalid_argument("[Matrix] Row Appending failed: row array-size mismatch with Matrix column-size.");
+	}
+
+	if (!Utils::IsValidData(_column_data))
+	{
+		throw std::invalid_argument("[Matrix] Row Appending failed: invalid value found in row-data.");
+	}
+
+	this->shape.second++;
+	this->volume += _column_data.size();
+
+	if (this->data.empty())
+	{
+		this->data.resize(_column_data.size());
+		for (const double& value : _column_data)
+		{
+			this->data.push_back({ value });
+		}
+	}
+	else
+	{
+		for (int row = 0; row < _column_data.size(); row++)
+		{
+			this->data[row].push_back(_column_data[row]);
+		}
+	}
+}
+
+// ========================================
 // Matrix Row(s)/Column(s) Removal Method(s)
 // ========================================
 void LinAlg::Matrix::PopRow(const int& _index)
@@ -1923,16 +2300,16 @@ void LinAlg::Matrix::PopRow(const int& _index)
 		throw std::runtime_error("[Matrix] Pop Row failed: empty Matrix.");
 	}
 
-	int index = (_index < 0) ? (_index + this->shape.first) : _index;
+	int index = (_index < 0) ? (_index + static_cast<int>(this->shape.first)) : _index;
 
-	if (index < 0 || index >= this->shape.first)
+	if (index < 0 || static_cast<size_t>(index) >= this->shape.first)
 	{
 		throw std::out_of_range("[Matrix] Pop Row failed: index: " + std::to_string(index) + " out of bounds: [0, rows).");
 	}
 
 	this->data.erase(this->data.begin() + index);
 
-	if (this->data.size() == 0 || this->data[0].size() == 0)
+	if (this->data.empty() || this->data[0].empty())
 	{
 		this->data.clear();
 		this->shape = { 0, 0 };
@@ -2024,27 +2401,82 @@ void LinAlg::Matrix::PopColumns(const std::vector<int>& _indices)
 // ========================================
 double LinAlg::Matrix::FrobeniusNorm() const
 {
-	return 0.0;
+	if (this->IsEmpty())
+	{
+		throw std::runtime_error("[Matrix] Frobenius-Norm Computation failed: empty Matrix.");
+	}
+
+	double frobenius_norm = 0.0;
+
+	for (int row = 0; row < this->shape.first; row++)
+	{
+		for (int col = 0; col < this->shape.second; col++)
+		{
+			frobenius_norm += (this->data[row][col] * this->data[row][col]);
+		}
+	}
+
+	frobenius_norm = std::sqrt(frobenius_norm);
+
+	return frobenius_norm;
 }
 
 double LinAlg::Matrix::SpectralNorm() const
 {
+	// Build after SVD is done.
 	return 0.0;
 }
 
 double LinAlg::Matrix::NuclearNorm() const
 {
+	// Build after SVD is done.
 	return 0.0;
 }
 
 double LinAlg::Matrix::InfinityNorm() const
 {
-	return 0.0;
+	if (this->IsEmpty())
+	{
+		throw std::runtime_error("[Matrix] Infinity-Norm Computation failed: empty Matrix.");
+	}
+
+	double infinity_norm = 0.0;
+
+	for (int row = 0; row < this->shape.first; row++)
+	{
+		double sum = 0.0;
+		for (int col = 0; col < this->shape.second; col++)
+		{
+			sum += std::abs(this->data[row][col]);
+		}
+
+		infinity_norm = std::max(sum, infinity_norm);
+	}
+
+	return infinity_norm;
 }
 
 double LinAlg::Matrix::OneNorm() const
 {
-	return 0.0;
+	if (this->IsEmpty())
+	{
+		throw std::runtime_error("[Matrix] One-Norm Computation failed: empty Matrix.");
+	}
+
+	double one_norm = 0.0;
+
+	for (int col = 0; col < this->shape.second; col++)
+	{
+		double sum = 0.0;
+		for (int row = 0; row < this->shape.first; row++)
+		{
+			sum += std::abs(this->data[row][col]);
+		}
+
+		one_norm = std::max(sum, one_norm);
+	}
+
+	return one_norm;
 }
 
 // ========================================
@@ -2271,7 +2703,7 @@ LinAlg::QRResult LinAlg::Matrix::HQRDecomposition(const bool& _full) const
 			x[j - i] = R.data[j][i];
 		}
 
-		double norm_x = Utils::Norm(x);
+		double norm_x = Utils::Norm(x, 2);
 		if (std::abs(norm_x) < LinAlg::Matrix::TOLERANCE)
 		{
 			continue;
@@ -2279,7 +2711,7 @@ LinAlg::QRResult LinAlg::Matrix::HQRDecomposition(const bool& _full) const
 
 		x[0] += (x[0] >= 0) ? norm_x : -norm_x;
 
-		norm_x = Utils::Norm(x);
+		norm_x = Utils::Norm(x, 2);
 		if (std::abs(norm_x) < LinAlg::Matrix::TOLERANCE)
 		{
 			continue;
@@ -2292,7 +2724,7 @@ LinAlg::QRResult LinAlg::Matrix::HQRDecomposition(const bool& _full) const
 
 		LinAlg::Matrix v_col({ vsize, 1 }, x);
 		LinAlg::Matrix v_row = v_col.Transpose();
-		LinAlg::Matrix vvt = v_col.DotProduct(v_row);
+		LinAlg::Matrix vvt = v_col.MatMul(v_row);
 		LinAlg::Matrix h_sub = LinAlg::Matrix::Identity(vsize) - (vvt * 2);
 
 		LinAlg::Matrix Qi = LinAlg::Matrix::Identity(rows);
@@ -2305,8 +2737,8 @@ LinAlg::QRResult LinAlg::Matrix::HQRDecomposition(const bool& _full) const
 			}
 		}
 
-		Q = Q.DotProduct(Qi);
-		R = Qi.DotProduct(R);
+		Q = Q.MatMul(Qi);
+		R = Qi.MatMul(R);
 	}
 
 	if (!_full && rows > columns)
@@ -2326,9 +2758,20 @@ LinAlg::QRResult LinAlg::Matrix::HQRDecomposition(const bool& _full) const
 	return LinAlg::QRResult(Q, R);
 }
 
-LinAlg::SVDResult LinAlg::Matrix::SVDDecomposition() const
+LinAlg::SVDResult LinAlg::Matrix::SVDecomposition() const
 {
-	return LinAlg::SVDResult();
+	if (this->IsEmpty())
+	{
+		throw std::runtime_error("[Matrix] SVDecomposition failed: empty Matrix.");
+	}
+
+	LinAlg::GKBResult ubv_t = this->GKBidiagonalize(); // this part is working fine.
+	LinAlg::SVDResult u1sv1_t = ubv_t.B.GRDiagonalize();
+
+	LinAlg::Matrix U = LinAlg::Matrix::MatMul(ubv_t.U, u1sv1_t.U);
+	LinAlg::Matrix V = LinAlg::Matrix::MatMul(ubv_t.V, u1sv1_t.V);
+
+	return LinAlg::SVDResult(U, u1sv1_t.S, V);
 }
 
 LinAlg::CholeskyResult LinAlg::Matrix::CholeskyDecomposition() const
@@ -2346,6 +2789,284 @@ LinAlg::EigenResult LinAlg::Matrix::SpectralDecomposition() const
 	return LinAlg::EigenResult();
 }
 
+LinAlg::GKBResult LinAlg::Matrix::GKBidiagonalize() const
+{
+	if (this->IsEmpty())
+	{
+		throw std::runtime_error("[Matrix] Golub-Kahan-Bidiagonalization failed: empty matrix.");
+	}
+
+	int rows = this->shape.first;
+	int columns = this->shape.second;
+
+	LinAlg::Matrix U = LinAlg::Matrix::Identity(rows);
+	LinAlg::Matrix B = *this;
+	LinAlg::Matrix V = LinAlg::Matrix::Identity(columns);
+
+	for (int i = 0; i < columns; i++)
+	{
+		if (i < rows)
+		{
+			int vsize = rows - i;
+			std::vector<double> x(vsize);
+
+			for (int j = i; j < rows; j++)
+			{
+				x[j - i] = B.data[j][i];
+			}
+
+			double norm_x = Utils::Norm(x, 2);
+			if (std::abs(norm_x) < LinAlg::Matrix::TOLERANCE)
+			{
+				continue;
+			}
+
+			x[0] += (x[0] >= 0) ? norm_x : -norm_x;
+
+			norm_x = Utils::Norm(x, 2);
+			if (std::abs(norm_x) < LinAlg::Matrix::TOLERANCE)
+			{
+				continue;
+			}
+
+			for (double& value : x)
+			{
+				value /= norm_x;
+			}
+
+			LinAlg::Matrix v_col({ vsize, 1 }, x);
+			LinAlg::Matrix v_row = v_col.Transpose();
+			LinAlg::Matrix vvt = v_col.MatMul(v_row);
+			LinAlg::Matrix h_sub = LinAlg::Matrix::Identity(vsize) - (vvt * 2);
+
+			LinAlg::Matrix Ui = LinAlg::Matrix::Identity(rows);
+
+			for (int r = 0; r < vsize; r++)
+			{
+				for (int c = 0; c < vsize; c++)
+				{
+					Ui.data[r + i][c + i] = h_sub.data[r][c];
+				}
+			}
+
+			U = U.MatMul(Ui);
+			B = Ui.MatMul(B);
+		}
+
+		if (i < (columns - 1))
+		{
+			int vsize = columns - i - 1;
+			std::vector<double> x(vsize);
+
+			for (int j = i + 1; j < columns; j++)
+			{
+				x[j - i - 1] = B.data[i][j];
+			}
+
+			double norm_x = Utils::Norm(x, 2);
+			if (std::abs(norm_x) < LinAlg::Matrix::TOLERANCE)
+			{
+				continue;
+			}
+
+			x[0] += (x[0] >= 0) ? norm_x : -norm_x;
+			norm_x = Utils::Norm(x, 2);
+
+			if (std::abs(norm_x) < LinAlg::Matrix::TOLERANCE)
+			{
+				continue;
+			}
+
+			for (double& value : x)
+			{
+				value /= norm_x;
+			}
+
+			LinAlg::Matrix v_col({ vsize, 1 }, x);
+			LinAlg::Matrix v_row = v_col.Transpose();
+			LinAlg::Matrix vvt = v_col.MatMul(v_row);
+			LinAlg::Matrix h_sub = LinAlg::Matrix::Identity(vsize) - (vvt * 2);
+
+			LinAlg::Matrix Vi = LinAlg::Matrix::Identity(columns);
+
+			for (int r = 0; r < vsize; r++)
+			{
+				for (int c = 0; c < vsize; c++)
+				{
+					Vi.data[r + i + 1][c + i + 1] = h_sub.data[r][c];
+				}
+			}
+
+			B = B.MatMul(Vi);
+			V = V.MatMul(Vi);
+		}
+	}
+
+	return LinAlg::GKBResult(U, B, V);
+}
+
+LinAlg::SVDResult LinAlg::Matrix::GRDiagonalize() const
+{
+	if (this->IsEmpty())
+	{
+		throw std::runtime_error("[Matrix] Golub-Reinsch-Diagonalization failed: empty Matrix.");
+	}
+
+	if (!this->IsBidiagonal())
+	{
+		throw std::runtime_error("[Matrix] Golub-Reinsch-Diagonalization failed: requires a bidiagonal Matrix.");
+	}
+
+	int rows = this->shape.first;
+	int columns = this->shape.second;
+	int k = std::min(rows, columns);
+
+	LinAlg::Matrix S = *this;
+	LinAlg::Matrix U = LinAlg::Matrix::Identity(rows);
+	LinAlg::Matrix V = LinAlg::Matrix::Identity(columns);
+
+	const int max_iteration = (100 * columns);
+
+	for (int itr = 0; itr < max_iteration; itr++)
+	{
+		double max_offdiag = 0.0;
+
+		for (int i = 0; i < k - 1; i++)
+		{
+			max_offdiag = std::max(max_offdiag, std::abs(S.data[i][i + 1]));
+		}
+
+		if (max_offdiag < LinAlg::Matrix::TOLERANCE)
+		{
+			break;
+		}
+
+		for (int i = 0; i < k - 1; i++)
+		{
+			double diag_i = std::abs(S.data[i][i]);
+			double diag_i1 = (i + 1 < k) ? std::abs(S.data[i + 1][i + 1]) : 0.0;
+
+			if (std::abs(S.data[i][i + 1]) < LinAlg::Matrix::TOLERANCE * (diag_i + diag_i1))
+			{
+				S.data[i][i + 1] = 0.0;
+			}
+		}
+
+		int q = k - 1;
+		while (q > 0 && std::abs(S.data[q - 1][q]) < LinAlg::Matrix::TOLERANCE)
+		{
+			q--;
+		}
+
+		if (q == 0) break;
+
+		int p = q - 1;
+		while (p > 0 && std::abs(S.data[p - 1][p]) >= LinAlg::Matrix::TOLERANCE)
+		{
+			p--;
+		}
+
+		double mu = 0.0;
+		{
+			double d1 = S.data[q - 1][q - 1];
+			double d2 = S.data[q][q];
+			double e1 = (q > 1) ? S.data[q - 2][q - 1] : 0.0;
+			double e2 = S.data[q - 1][q];
+
+			double a11 = d1 * d1 + e1 * e1;
+			double a22 = d2 * d2 + e2 * e2;
+			double a12 = d1 * e2;
+
+			LinAlg::Matrix T({ 2, 2 }, { a11, a12, a12, a22 });
+			mu = T.WilkinsonShift();
+		}
+
+		double d_p = S.data[p][p];
+		double e_p = (p < k - 1) ? S.data[p][p + 1] : 0.0;
+
+		double y = (d_p * d_p) - mu;
+		double z = (d_p * e_p);
+
+		for (int i = p; i < q; i++)
+		{
+			// Right Givens
+			auto [c1, s1] = LinAlg::Matrix::ComputeGivens(y, z);
+			LinAlg::Matrix G({2, 2}, { c1, s1, -s1, c1 });
+
+			S = S.PartialMatMul(G, { i, i }, { i + 2, i + 2 }, false);
+			V = V.PartialMatMul(G, { i, i }, { i + 2, i + 2 }, false);
+
+			// Left Givens
+			y = S.data[i][i];
+			z = ((i + 1) < rows) ? S.data[i + 1][i] : 0.0;
+
+			auto [c2, s2] = LinAlg::Matrix::ComputeGivens(y, z);
+			LinAlg::Matrix H({ 2, 2 }, { c2, -s2, s2, c2 });
+
+			S = S.PartialMatMul(H, { i, i }, { i + 2, i + 2 }, true);
+			U = U.PartialMatMul(H.Transpose(), {i, i}, {i + 2, i + 2}, false);
+
+			// Update y, z for next iteration
+			if (i < q - 1)
+			{
+				y = S.data[i][i + 1];
+				z = ((i + 2) < columns) ? S.data[i][i + 2] : 0.0;
+			}
+		}
+	}
+
+	U.ClearNoise();
+	S.ClearNoise();
+	V.ClearNoise();
+	
+
+	std::vector<std::pair<double, int>> singular_values(k);
+
+	for (int i = 0; i < k; i++)
+	{
+		singular_values[i] = std::make_pair(S.data[i][i], i);
+	}
+
+	std::sort(singular_values.begin(), singular_values.end(),
+		[](const std::pair<double, int>& a, const std::pair<double, int>& b)
+		{
+			return std::abs(a.first) > std::abs(b.first);
+		});
+
+	std::vector<int> left_permutation(rows);
+	std::vector<int> right_permutation(columns);
+
+	for (int i = 0; i < rows; i++)
+	{
+		left_permutation[i] = (i < k) ? singular_values[i].second : i;
+	}
+
+	for (int i = 0; i < columns; i++)
+	{
+		right_permutation[i] = (i < k) ? singular_values[i].second : i;
+	}
+
+	S.PermuteRows(left_permutation);
+	S.PermuteColumns(right_permutation);
+
+	U.PermuteColumns(left_permutation);
+	V.PermuteColumns(right_permutation);
+
+	for (int i = 0; i < k; i++)
+	{
+		if (S.data[i][i] < 0.0)
+		{
+			S.data[i][i] = -S.data[i][i];
+			for (int row = 0; row < rows; row++)
+			{
+				U.data[row][i] = -U.data[row][i];
+			}
+		}
+	}
+
+	return LinAlg::SVDResult(U, S, V);
+}
+
 // ========================================
 // Matrix Print Method
 // ========================================
@@ -2355,7 +3076,7 @@ void LinAlg::Matrix::Print() const
 	{
 		for (const double& value : row)
 		{
-			std::cout << value << " ";
+			std::cout << value << "\t";
 		}
 		std::cout << std::endl;
 	}

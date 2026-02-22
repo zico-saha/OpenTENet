@@ -131,6 +131,7 @@
     <ClInclude Include="ArcTan.h" />
     <ClInclude Include="BaseActivation.h" />
     <ClInclude Include="BinaryStep.h" />
+    <ClInclude Include="Complex.h" />
     <ClInclude Include="ELU.h" />
     <ClInclude Include="Exponential.h" />
     <ClInclude Include="Gaussian.h" />
@@ -141,10 +142,13 @@
     <ClInclude Include="HardTanh.h" />
     <ClInclude Include="Initializer.h" />
     <ClInclude Include="LeakyReLU.h" />
+    <ClInclude Include="LinAlg.h" />
     <ClInclude Include="Linear.h" />
     <ClInclude Include="LogSigmoid.h" />
     <ClInclude Include="LogSoftmax.h" />
     <ClInclude Include="Matrix.h" />
+    <ClInclude Include="MatrixDecompResult.h" />
+    <ClInclude Include="MatrixProperties.h" />
     <ClInclude Include="Mish.h" />
     <ClInclude Include="PReLU.h" />
     <ClInclude Include="ReLU.h" />
@@ -173,6 +177,7 @@
     <ClCompile Include="ArcTan.cpp" />
     <ClCompile Include="BaseActivation.cpp" />
     <ClCompile Include="BinaryStep.cpp" />
+    <ClCompile Include="Complex.cpp" />
     <ClCompile Include="ELU.cpp" />
     <ClCompile Include="Exponential.cpp" />
     <ClCompile Include="Gaussian.cpp" />
@@ -183,11 +188,14 @@
     <ClCompile Include="HardTanh.cpp" />
     <ClCompile Include="Initializer.cpp" />
     <ClCompile Include="LeakyReLU.cpp" />
+    <ClCompile Include="LinAlg.cpp" />
     <ClCompile Include="Linear.cpp" />
     <ClCompile Include="LogSigmoid.cpp" />
     <ClCompile Include="LogSoftmax.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="MatrixDecompResult.cpp" />
+    <ClCompile Include="MatrixProperties.cpp" />
     <ClCompile Include="Mish.cpp" />
     <ClCompile Include="PReLU.cpp" />
     <ClCompile Include="ReLU.cpp" />

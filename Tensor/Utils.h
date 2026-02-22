@@ -265,7 +265,7 @@ namespace Utils
      * @note Result type matches the input vector type T
      */
     template<Numeric T, Numeric U, Numeric V>
-    std::vector<T> ScaleNShift(const std::vector<T>& nums, const std::vector<U>& scale, const std::vector<V>& shift);
+    std::vector<T> ScaleNShift(const std::vector<T>& _nums, const std::vector<U>& _scale, const std::vector<V>& _shift);
 
     /**
      * @brief Applies element-wise scaling with scalar shift: result[i] = nums[i] * scale[i] + shift.
@@ -282,7 +282,7 @@ namespace Utils
      * @throws std::invalid_argument if size mismatch between nums and scale
      */
     template<Numeric T, Numeric U, Numeric V>
-    std::vector<T> ScaleNShift(const std::vector<T>& nums, const std::vector<U>& scale, V shift);
+    std::vector<T> ScaleNShift(const std::vector<T>& _nums, const std::vector<U>& _scale, V _shift);
 
     /**
      * @brief Applies scalar scaling with element-wise shift: result[i] = nums[i] * scale + shift[i].
@@ -299,7 +299,7 @@ namespace Utils
      * @throws std::invalid_argument if size mismatch between nums and shift
      */
     template<Numeric T, Numeric U, Numeric V>
-    std::vector<T> ScaleNShift(const std::vector<T>& nums, U scale, const std::vector<V>& shift);
+    std::vector<T> ScaleNShift(const std::vector<T>& _nums, U _scale, const std::vector<V>& _shift);
 
     /**
      * @brief Applies scalar scaling and shifting: result[i] = nums[i] * scale + shift.
@@ -314,10 +314,13 @@ namespace Utils
      * @return std::vector<T> Transformed vector with type T
      */
     template<Numeric T, Numeric U, Numeric V>
-    std::vector<T> ScaleNShift(const std::vector<T>& nums, U scale, V shift);
+    std::vector<T> ScaleNShift(const std::vector<T>& _nums, U _scale, V _shift);
+
+    template<Numeric T, Numeric P>
+    double Norm(const std::vector<T>& _nums, const P& _p);
 
     template<Numeric T>
-    double Norm(const std::vector<T>& nums);
+    double InfinityNorm(const std::vector<T>& _nums);
 
     /**
      * @brief Checks if a 2D matrix has consistent row lengths (is rectangular).
@@ -332,38 +335,7 @@ namespace Utils
      * @note A matrix with one row is considered rectangular
      */
     template<Numeric T>
-    bool IsRectangular(const std::vector<std::vector<T>>& matrix);
-
-    /**
-     * @brief Flattens a 2D matrix into a 1D vector (row-major order).
-     *
-     * @tparam T Numeric type satisfying the Numeric concept
-     * @param matrix Input matrix to flatten
-     * 
-     * @return std::vector<T> Flattened vector containing all elements in row-major order
-     *
-     * @note Returns empty vector if input is empty
-     * @note Elements are concatenated: [row0 elements, row1 elements, ...]
-     */
-    template<Numeric T>
-    std::vector<T> MatrixToVector(const std::vector<std::vector<T>>& matrix);
-
-    /**
-     * @brief Reshapes a 1D vector into a 2D matrix with specified dimensions.
-     *
-     * @tparam T Numeric type satisfying the Numeric concept
-     * @param vec Input vector to reshape
-     * @param shape Target matrix dimensions as (rows, columns)
-     * 
-     * @return std::vector<std::vector<T>> Reshaped matrix
-     *
-     * @throws std::invalid_argument if vector size doesn't match rows * columns
-     *
-     * @note Elements are filled in row-major order
-     * @note shape.first = number of rows, shape.second = number of columns
-     */
-    template<Numeric T>
-    std::vector<std::vector<T>> VectorToMatrix(const std::vector<T>& vec, std::pair<int, int> shape);
+    bool IsRectangular(const std::vector<std::vector<T>>& _matrix);
 
     /**
      * @brief Checks if computing the volume (product of dimensions) would cause integer overflow.

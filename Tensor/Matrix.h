@@ -3,6 +3,7 @@
 #include "Utils.h"
 
 #include <algorithm>
+#include <cctype>
 #include <cmath>
 #include <iostream>
 #include <limits>
@@ -24,8 +25,9 @@ namespace LinAlg
     struct LDUResult;
     struct QRResult;
     struct SVDResult;
-    struct EigenResult;
     struct CholeskyResult;
+    struct EigenResult;
+    struct GKBResult;
 
     class Matrix
     {
@@ -34,12 +36,14 @@ namespace LinAlg
     private:
         std::vector<std::vector<double>> data;
 
+        std::vector<std::pair<double, int>> sparse_data;
+
         std::pair<int, int> shape = { 0, 0 };
 
         int volume = 0;
 
         // ========== Constants ==========
-        static constexpr double TOLERANCE = 1e-6;
+        static constexpr double TOLERANCE = 1e-9;
 
     private:
         bool IsFullColumnRank() const;
@@ -50,14 +54,22 @@ namespace LinAlg
 
         LinAlg::Matrix Apply(const std::function<double(double)>& _func) const;
 
+        std::pair<double, double> ComputeGivens(const double& _value_1, const double& _value_2) const;
+
+        double WilkinsonShift() const;
+
+        Matrix PartialMatMul(const Matrix& _sub_matrix, const std::pair<int, int>& _start, const std::pair<int, int>& _end, const bool& _left_multiply = false) const;
+
+        void PermuteRows(const std::vector<int>& _permutation);
+
+        void PermuteColumns(const std::vector<int>& _permutation);
+
     public:
         Matrix() {}
 
-        Matrix(const std::vector<std::vector<double>>& _matrix);
-
         Matrix(const std::pair<int, int>& _shape, const double& _value);
 
-        Matrix(const std::pair<int, int>& _shape, std::vector<double>& _data);
+        Matrix(const std::pair<int, int>& _shape, const std::vector<double>& _data);
 
         static Matrix Identity(const int& _n, const double& _scale = 1.0);
 
@@ -80,6 +92,10 @@ namespace LinAlg
         bool IsSquare() const;
 
         bool IsDiagonal(const double& _tolerance = Matrix::TOLERANCE) const;
+
+        bool IsBidiagonal(const std::string& _type = "any", const double& _tolerance = Matrix::TOLERANCE) const;
+
+        bool IsTridiagonal(const double& _tolerance = Matrix::TOLERANCE) const;
 
         bool IsUpperTriangular(const double& _tolerance = Matrix::TOLERANCE) const;
 
@@ -161,11 +177,11 @@ namespace LinAlg
 
         Matrix DivideColumnwise(const std::vector<double>& _vector) const;
 
-        Matrix DotProduct(const std::vector<std::vector<double>>& _matrix) const;
+        Matrix MatMul(const std::vector<std::vector<double>>& _matrix) const;
 
-        Matrix DotProduct(const Matrix& _matrix) const;
+        Matrix MatMul(const Matrix& _matrix) const;
 
-        static Matrix DotProduct(const Matrix& _matrix_1, const Matrix& _matrix_2);
+        static Matrix MatMul(const Matrix& _matrix_1, const Matrix& _matrix_2);
 
         Matrix Transpose() const;
 
@@ -211,7 +227,9 @@ namespace LinAlg
 
         void SwapColumns(const int& _col_1, const int& _col_2);
 
-        Matrix Submatrix(const std::pair<int, int> _start, const std::pair<int, int> _end) const;
+        void Patch(const Matrix& _matrix, const std::pair<int, int>& _start, const std::pair<int, int>& _end);
+
+        Matrix Submatrix(const std::pair<int, int>& _start, const std::pair<int, int>& _end) const;
 
         std::vector<double> GetRow(const int& _row_index) const;
 
@@ -222,6 +240,10 @@ namespace LinAlg
         Matrix GetColumns(const std::vector<int>& _column_indices) const;
 
         std::vector<double> GetFlatData() const;
+
+        void PushRow(const std::vector<double>& _row_data);
+
+        void PushColumn(const std::vector<double>& _column_data);
 
         void PopRow(const int& _index = -1);
 
@@ -249,7 +271,7 @@ namespace LinAlg
 
         LinAlg::QRResult HQRDecomposition(const bool& _full = true) const;
 
-        LinAlg::SVDResult SVDDecomposition() const;
+        LinAlg::SVDResult SVDecomposition() const;
 
         LinAlg::CholeskyResult CholeskyDecomposition() const;
 
@@ -257,53 +279,10 @@ namespace LinAlg
 
         LinAlg::EigenResult SpectralDecomposition() const;  // For symmetric matrices
 
+        LinAlg::GKBResult GKBidiagonalize() const;
+
+        LinAlg::SVDResult GRDiagonalize() const;
+
         void Print() const;
-    };
-
-    struct EliminationResult
-    {
-        Matrix A;
-        Matrix B;
-        int rank = 0;
-        int swapCount = 0;
-    };
-
-    struct LUResult
-    {
-        Matrix L;
-        Matrix U;
-        Matrix P;
-    };
-
-    struct LDUResult
-    {
-        Matrix L;
-        Matrix D;
-        Matrix U;
-        Matrix P;
-    };
-
-    struct QRResult
-    {
-        Matrix Q;
-        Matrix R;
-    };
-
-    struct SVDResult
-    {
-        Matrix U;
-        std::vector<double> S;
-        Matrix V;
-    };
-
-    struct EigenResult
-    {
-        std::vector<double> eigenvalues;
-        Matrix eigenvectors;
-    };
-
-    struct CholeskyResult
-    {
-        Matrix L;
     };
 }

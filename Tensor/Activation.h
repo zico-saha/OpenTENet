@@ -30,7 +30,7 @@
 #include "SparsePlus.h"
 #include "SquarePlus.h"
 #include "Swish.h"
-#include "_Tanh.h"
+#include "Tanh.h"
 #include "TanhShrink.h"
 
 #include "LogSoftmax.h"

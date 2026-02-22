@@ -55,6 +55,9 @@
     <Filter Include="Header Files\Initializer">
       <UniqueIdentifier>{f7efcafe-17ab-4f2a-b193-7be350702ed2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\LinAlg">
+      <UniqueIdentifier>{db298a34-1e73-4986-8267-bdbe75472e9d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseActivation.h">
@@ -168,14 +171,26 @@
     <ClInclude Include="Sparsemax.h">
       <Filter>Header Files\Activation\TensorActivation</Filter>
     </ClInclude>
-    <ClInclude Include="Matrix.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Tanh.h">
       <Filter>Header Files\Activation\ScalarActivation</Filter>
     </ClInclude>
     <ClInclude Include="Initializer.h">
       <Filter>Header Files\Initializer</Filter>
+    </ClInclude>
+    <ClInclude Include="Complex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LinAlg.h">
+      <Filter>Header Files\LinAlg</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>Header Files\LinAlg</Filter>
+    </ClInclude>
+    <ClInclude Include="MatrixDecompResult.h">
+      <Filter>Header Files\LinAlg</Filter>
+    </ClInclude>
+    <ClInclude Include="MatrixProperties.h">
+      <Filter>Header Files\LinAlg</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -298,6 +313,18 @@
     </ClCompile>
     <ClCompile Include="Initializer.cpp">
       <Filter>Source Files\Initializer</Filter>
+    </ClCompile>
+    <ClCompile Include="Complex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MatrixProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MatrixDecompResult.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LinAlg.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

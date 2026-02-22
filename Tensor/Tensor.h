@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Activation.h"
-#include "Matrix.h"
+#include "LinAlg.h"
 #include "TensorSlice.h"
 #include "Utils.h"
 
